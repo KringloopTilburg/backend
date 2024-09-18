@@ -15,5 +15,6 @@
   </dependencies>
   <modules>
     <module>product-service</module>
+    <module>productimage-service</module>
   </modules>
 </project>
