@@ -16,5 +16,6 @@
   <modules>
     <module>product-service</module>
     <module>productimage-service</module>
+    <module>authentication-service</module>
   </modules>
 </project>

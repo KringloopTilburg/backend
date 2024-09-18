@@ -1,0 +1,70 @@
+package nl.kringlooptilburg.authenticationservice.service;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import nl.kringlooptilburg.authenticationservice.model.User;
+import org.springframework.stereotype.Service;
+
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+@Service
+public class JwtService {
+
+    private String SECRET_KEY = "G7RtBxU4fVQx9z7vT1iX0WzQEQBmcCKb";
+    private String EXPIRATIONTIME = "86400";
+
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    }
+
+    public Claims getAllClaimsFromToken(String token) {
+        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+    }
+
+    public Date getExpirationDateFromToken(String token) {
+        return getAllClaimsFromToken(token).getExpiration();
+    }
+
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
+
+    public String generate(User user, String type) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.getUserId());
+        claims.put("role", user.getRole());
+        return doGenerateToken(claims, user.getEmail(), type);
+    }
+
+    private String doGenerateToken(Map<String, Object> claims, String username, String type) {
+        long expirationTimeLong;
+        if ("ACCESS".equals(type)) {
+            expirationTimeLong = Long.parseLong(EXPIRATIONTIME) * 1000;
+        } else {
+            expirationTimeLong = Long.parseLong(EXPIRATIONTIME) * 1000 * 5;
+        }
+        final Date createdDate = new Date();
+        final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(username)
+                .setExpiration(expirationDate)
+                .signWith(SignatureAlgorithm.HS256, key)
+                .compact();
+    }
+
+    public Boolean validateToken(String token) {
+        return !isTokenExpired(token);
+    }
+}
