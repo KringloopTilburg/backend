@@ -1,0 +1,14 @@
+input {
+  rabbitmq {
+    id => "rabbitmq_logs"
+    host => "kangaroo.rmq.cloudamqp.com"
+    port => 5671
+    user => "spredgrs"
+    password => "Fp2epSxpOW-YCQNNXtQZNMEthrGYrkyL"
+    vhost => "spredgrs"
+    queue => "log_queue"
+    durable => true
+    ack => true
+    ssl => true
+  }
+}

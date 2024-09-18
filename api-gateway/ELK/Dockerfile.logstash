@@ -1,0 +1,6 @@
+FROM docker.elastic.co/logstash/logstash:7.17.13
+
+COPY logstash.yml /usr/share/logstash/config/
+COPY logstash.conf /usr/share/logstash/pipeline/
+
+CMD ["-f", "/usr/share/logstash/pipeline/logstash.conf"]

@@ -1,0 +1,42 @@
+version: '3'
+services:
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - elk-network
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+
+  logstash:
+    container_name: logstash
+    build:
+      context: .
+      dockerfile: Dockerfile.logstash
+    ports:
+      - "5000:5000"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk-network
+      - logstash-rabbitmq-network
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.17.13
+    ports:
+      - "5601:5601"
+    depends_on:
+      - logstash
+    networks:
+      - elk-network
+
+networks:
+  elk-network:
+    driver: bridge
+  logstash-rabbitmq-network:
+    driver: bridge

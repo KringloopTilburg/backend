@@ -17,5 +17,6 @@
     <module>product-service</module>
     <module>productimage-service</module>
     <module>authentication-service</module>
+    <module>api-gateway</module>
   </modules>
 </project>
