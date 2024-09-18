@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 @SpringBootTest
 @ActiveProfiles("test")
 @ContextConfiguration(classes = TestConfiguration.class)
-class ProductimageServiceApplicationTests {
+class ProductImageServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

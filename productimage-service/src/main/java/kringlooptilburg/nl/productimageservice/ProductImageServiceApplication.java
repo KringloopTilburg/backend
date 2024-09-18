@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ProductimageServiceApplication {
+public class ProductImageServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProductimageServiceApplication.class, args);
+		SpringApplication.run(ProductImageServiceApplication.class, args);
 	}
 }
