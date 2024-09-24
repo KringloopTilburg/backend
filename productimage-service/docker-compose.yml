@@ -1,5 +1,5 @@
 version: "1"
-name: "scalable productimage service"
+name: "scalable-productimage-service"
 services:
 #  some-scylla:
 #    image: scylladb/scylla:4.5.0
