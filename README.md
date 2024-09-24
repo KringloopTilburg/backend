@@ -39,9 +39,30 @@ Het project wordt ontwikkeld voor Kringloop013, een commercieel kringloopbedrijf
 Deze GitHub repository bevat alle backend services die dit platform mogelijk maken.
 Een overzicht van deze services:
 <ul>
-  <li><a href="https://github.com/KringloopTilburg/backend/tree/main/product-service">Product Service</a></li>
-  <li><a href="https://github.com/KringloopTilburg/backend/tree/main/api-gateway">API Gateway</li>
-  <li><a href="https://github.com/KringloopTilburg/backend/tree/main/authentication-service">Authentication Service</a></li>
+  <li>
+    <a href="/product-service/README.md">Product Service</a>
+    <ul>
+      <li>
+        <p>Verantwoordelijk voor alle CRUD operaties op de producten en product afbeeldingen.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="/api-gateway/README.md">API Gateway</a>
+    <ul>
+      <li>
+        <p>Verantwoordelijk voor het doorsturen van de requests van de gebruikers naar de desbetreffende service.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="/authentication-service/README.md">Authentication Service</a>
+    <ul>
+      <li>
+        <p>Verantwoordelijk voor het inloggen, uitloggen en registreren van gebruikers.</p>
+      </li>
+    </ul>
+  </li>
 </ul>
 
 <p align="right">(<a href="#readme-top">terug naar boven</a>)</p>
@@ -58,7 +79,7 @@ Hier een lijst van grote frameworks/technologiën die gebruikt worden binnen dit
 
 ## Opstarten
 
-Het opstarten van de verschillende services binnen het project wordt uitgelegd per service, deze zijn hier te vinden:
+Instructies voor het opstarten van een service zijn te vinden in het gedeelte "Opstarten" in de README van een service.
 <ul>
   <li><a href="/product-service/README.md#opstarten">Product Service</a></li>
   <li><a href="/api-gateway/README.md#opstarten">API Gateway</li>
@@ -72,7 +93,7 @@ Het opstarten van de verschillende services binnen het project wordt uitgelegd p
 ## Contact
 
 <!-- (vul hier jullie namen in als je het project overneemt!) -->
-### Groep Najaar 2024 *(huidige groep)*
+#### Groep Najaar 2024 *(huidige groep)*
 - Abe Vriens | abevriens.vriens@student.fontys.nl
 - Mies van Gogh | mies.vangogh@student.fontys.nl
 - May Bossink | b.bossink@student.fontys.nl
