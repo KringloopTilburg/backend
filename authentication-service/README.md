@@ -5,7 +5,7 @@
     <img src="https://www.kringlooptilburg.nl/sites/default/files/logo--02.png" alt="Logo" height="150">
   </a>
 
-  <h3 align="center">Kringloop013 | Backend</h3>
+  <h3 align="center">Kringloop013 | Authentication Service</h3>
 
   <p align="center">
     Backend project voor het duurzaamste en betrouwbaarste kringloop platform ooit.
