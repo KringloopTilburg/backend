@@ -66,18 +66,18 @@ Het opstarten van de verschillende services binnen het project wordt uitgelegd p
 </ul>
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">terug naar boven</a>)</p>
 
 
 ## Contact
 
 <!-- (vul hier jullie namen in als je het project overneemt!) -->
-Groep Najaar 2024 (huidige groep):
-Abe Vriens - abevriens.vriens@student.fontys.nl
-Mies van Gogh - mies.vangogh@student.fontys.nl
-May Bossink - b.bossink@student.fontys.nl
-Milo Dorigo - m.dorigo@student.fontys.nl
-Bas de Bruin - bas.debruin@student.fontys.nl
+### Groep Najaar 2024 *(huidige groep)*
+- Abe Vriens | abevriens.vriens@student.fontys.nl
+- Mies van Gogh | mies.vangogh@student.fontys.nl
+- May Bossink | b.bossink@student.fontys.nl
+- Milo Dorigo | m.dorigo@student.fontys.nl
+- Bas de Bruin | bas.debruin@student.fontys.nl
 
 <p align="right">(<a href="#readme-top">terug naar boven</a>)</p>
 
