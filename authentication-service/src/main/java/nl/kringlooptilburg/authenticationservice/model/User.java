@@ -26,9 +26,11 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private UserRole role;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
+    
     @Nullable
     @Column(name = "business_id")
     private Integer businessId;

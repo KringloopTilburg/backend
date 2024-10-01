@@ -16,8 +16,8 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    private String SECRET_KEY = "G7RtBxU4fVQx9z7vT1iX0WzQEQBmcCKb";
-    private String EXPIRATIONTIME = "86400";
+    private final String SECRET_KEY = "G7RtBxU4fVQx9z7vT1iX0WzQEQBmcCKb";
+    private static final String EXPIRATION_TIME = "86400";
 
     private Key key;
 
@@ -42,16 +42,16 @@ public class JwtService {
     public String generate(User user, String type) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", user.getUserId());
-        claims.put("role", user.getRole());
+        claims.put("role", user.getRole().getName());
         return doGenerateToken(claims, user.getEmail(), type);
     }
 
     private String doGenerateToken(Map<String, Object> claims, String username, String type) {
         long expirationTimeLong;
         if ("ACCESS".equals(type)) {
-            expirationTimeLong = Long.parseLong(EXPIRATIONTIME) * 1000;
+            expirationTimeLong = Long.parseLong(EXPIRATION_TIME) * 1000;
         } else {
-            expirationTimeLong = Long.parseLong(EXPIRATIONTIME) * 1000 * 5;
+            expirationTimeLong = Long.parseLong(EXPIRATION_TIME) * 1000 * 5;
         }
         final Date createdDate = new Date();
         final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong);

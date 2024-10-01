@@ -3,7 +3,7 @@ package nl.kringlooptilburg.authenticationservice.service;
 import nl.kringlooptilburg.authenticationservice.exception.EmailAlreadyExistsException;
 import nl.kringlooptilburg.authenticationservice.exception.InvalidCredentialsException;
 import nl.kringlooptilburg.authenticationservice.model.User;
-import nl.kringlooptilburg.authenticationservice.model.UserRole;
+import nl.kringlooptilburg.authenticationservice.model.Role;
 import nl.kringlooptilburg.authenticationservice.publisher.LogPublisher;
 import nl.kringlooptilburg.authenticationservice.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class UserRepositoryServiceTests {
+class CustomUserDetailsServiceTests {
 
     @Mock
     private UserRepository userRepository;
@@ -32,7 +32,7 @@ class UserRepositoryServiceTests {
     private LogPublisher logPublisher;
 
     @InjectMocks
-    private UserRepositoryService userRepositoryService;
+    private CustomUserDetailsService customUserDetailsService;
 
     @BeforeEach
     public void setup() {
@@ -46,13 +46,13 @@ class UserRepositoryServiceTests {
         var user = new User();
         user.setEmail("test@example.com");
         user.setPassword("password");
-        user.setRole(UserRole.USER);
+        user.setRole(Role.USER);
 
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(userRepository.save(any())).thenReturn(user);
 
         // Act
-        var response = userRepositoryService.save(user);
+        var response = customUserDetailsService.save(user);
 
         // Assert
         assertNotNull(response);
@@ -66,13 +66,13 @@ class UserRepositoryServiceTests {
     @DisplayName("Should not be able to save an existing user")
     void TEST_save_002() {
         // Arrange
-        var user = new User(1, "test@example.com", "password", UserRole.USER);
+        var user = new User(1, "test@example.com", "password", Role.USER);
 
         // Act
         when(userRepository.existsByEmail(any())).thenReturn(true);
 
         // Assert
-        assertThrows(EmailAlreadyExistsException.class, () -> userRepositoryService.save(user));
+        assertThrows(EmailAlreadyExistsException.class, () -> customUserDetailsService.save(user));
     }
 
     @Test
@@ -84,12 +84,12 @@ class UserRepositoryServiceTests {
         var user = new User();
         user.setEmail(email);
         user.setPassword(password);
-        user.setRole(UserRole.USER);
+        user.setRole(Role.USER);
 
         when(userRepository.findByEmailAndPassword(anyString(), anyString())).thenReturn(user);
 
         // Act
-        var response = userRepositoryService.findByEmailAndPassword(email, password);
+        var response = customUserDetailsService.findByEmailAndPassword(email, password);
 
         // Assert
         assertNotNull(response);
@@ -108,7 +108,7 @@ class UserRepositoryServiceTests {
         when(userRepository.findByEmailAndPassword(anyString(), anyString())).thenReturn(null);
 
         // Assert
-        assertThrows(InvalidCredentialsException.class, () -> userRepositoryService.findByEmailAndPassword(email, password));
+        assertThrows(InvalidCredentialsException.class, () -> customUserDetailsService.findByEmailAndPassword(email, password));
     }
 
     @Test
@@ -119,13 +119,12 @@ class UserRepositoryServiceTests {
         var user = new User();
         user.setEmail("test@example.com");
         user.setPassword("password");
-        ;
-        user.setRole(UserRole.USER);
+        user.setRole(new Role(1L, "ROLE_USER"));
 
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
 
         // Act
-        var response = userRepositoryService.findById(userId);
+        var response = customUserDetailsService.findById(userId);
 
         //Assert
         assertNotNull(response);
@@ -143,7 +142,7 @@ class UserRepositoryServiceTests {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         // Assert
-        assertThrows(IllegalAccessException.class, () -> userRepositoryService.findById(userId));
+        assertThrows(IllegalAccessException.class, () -> customUserDetailsService.findById(userId));
     }
 
     @Test
@@ -154,12 +153,12 @@ class UserRepositoryServiceTests {
         var user = new User();
         user.setEmail(email);
         user.setPassword("password");
-        user.setRole(UserRole.USER);
+        user.setRole(Role.USER);
 
         when(userRepository.findByEmail(anyString())).thenReturn(user);
 
         // Act
-        var response = userRepositoryService.findByEmail(email);
+        var response = customUserDetailsService.findByEmail(email);
 
         // Assert
         assertNotNull(response);
@@ -177,6 +176,6 @@ class UserRepositoryServiceTests {
         when(userRepository.findByEmail(anyString())).thenReturn(null);
 
         // Assert
-        assertThrows(InvalidCredentialsException.class, () -> userRepositoryService.findByEmail(email));
+        assertThrows(InvalidCredentialsException.class, () -> customUserDetailsService.findByEmail(email));
     }
 }
