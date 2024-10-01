@@ -4,7 +4,7 @@ import nl.kringlooptilburg.authenticationservice.exception.InvalidCredentialsExc
 import nl.kringlooptilburg.authenticationservice.model.AuthenticationRequest;
 import nl.kringlooptilburg.authenticationservice.model.AuthenticationResponse;
 import nl.kringlooptilburg.authenticationservice.model.User;
-import nl.kringlooptilburg.authenticationservice.model.UserRole;
+import nl.kringlooptilburg.authenticationservice.model.Role;
 import nl.kringlooptilburg.authenticationservice.publisher.LogPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,7 @@ class AuthenticationServiceTests {
     private JwtService jwtService;
 
     @Mock
-    private UserRepositoryService userRepositoryService;
+    private CustomUserDetailsService customUserDetailsService;
 
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
@@ -54,9 +54,9 @@ class AuthenticationServiceTests {
         User newUser = new User();
         newUser.setEmail(authRequest.getEmail());
         newUser.setPassword(authRequest.getPassword());
-        newUser.setRole(UserRole.USER);
+        newUser.setRole(Role.USER);
 
-        when(userRepositoryService.save(any())).thenReturn(newUser);
+        when(customUserDetailsService.save(any())).thenReturn(newUser);
         when(jwtService.generate(any(), anyString())).thenReturn("access_token");
 
         // Act
@@ -75,7 +75,7 @@ class AuthenticationServiceTests {
         AuthenticationRequest authRequest = new AuthenticationRequest("test@example.com", "password");
 
         // Mock userRepositoryService.save() om null terug te geven
-        when(userRepositoryService.save(any())).thenReturn(null);
+        when(customUserDetailsService.save(any())).thenReturn(null);
 
         // Assert
         assertThrows(IllegalArgumentException.class, () -> authenticationService.register(authRequest));
@@ -90,9 +90,9 @@ class AuthenticationServiceTests {
         User existingUser = new User();
         existingUser.setEmail(authRequest.getEmail());
         existingUser.setPassword(authRequest.getPassword());
-        existingUser.setRole(UserRole.USER);
+        existingUser.setRole(Role.USER);
 
-        when(userRepositoryService.findByEmail(authRequest.getEmail())).thenReturn(existingUser);
+        when(customUserDetailsService.findByEmail(authRequest.getEmail())).thenReturn(existingUser);
         when(passwordEncoder.matches(authRequest.getPassword(), existingUser.getPassword())).thenReturn(true);
         when(jwtService.generate(any(), anyString())).thenReturn("access_token");
 
@@ -111,7 +111,7 @@ class AuthenticationServiceTests {
         // Arrange
         AuthenticationRequest authRequest = new AuthenticationRequest("test@example.com", "password");
 
-        when(userRepositoryService.findByEmail(anyString())).thenThrow(InvalidCredentialsException.class);
+        when(customUserDetailsService.findByEmail(anyString())).thenThrow(InvalidCredentialsException.class);
 
         // Assert
         assertThrows(InvalidCredentialsException.class, () -> authenticationService.login(authRequest));

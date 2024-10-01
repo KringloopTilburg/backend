@@ -1,4 +1,4 @@
-package nl.kringlooptilburg.apigateway.component;
+package nl.kringlooptilburg.apigateway.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -13,7 +13,7 @@ import java.util.Date;
 @Component
 public class JwtService {
 
-    private String SECRET_KEY = "G7RtBxU4fVQx9z7vT1iX0WzQEQBmcCKb";
+    private final String SECRET_KEY = "G7RtBxU4fVQx9z7vT1iX0WzQEQBmcCKb";
 
     private Key key;
 
@@ -30,15 +30,12 @@ public class JwtService {
         }
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isValid(String token) {
         try {
-            return this.getAllClaimsFromToken(token).getExpiration().before(new Date());
+            Claims claims = this.getAllClaimsFromToken(token);
+            return claims.getExpiration().after(new Date());
         } catch (IllegalAccessException e) {
             return true;
         }
-    }
-
-    public boolean isInvalid(String token) {
-        return this.isTokenExpired(token);
     }
 }

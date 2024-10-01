@@ -6,7 +6,6 @@ import nl.kringlooptilburg.authenticationservice.exception.InvalidCredentialsExc
 import nl.kringlooptilburg.authenticationservice.model.AuthenticationRequest;
 import nl.kringlooptilburg.authenticationservice.model.AuthenticationResponse;
 import nl.kringlooptilburg.authenticationservice.model.User;
-import nl.kringlooptilburg.authenticationservice.model.UserRole;
 import nl.kringlooptilburg.authenticationservice.publisher.LogPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,8 +15,9 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     private final JwtService jwtService;
-    private final UserRepositoryService userRepositoryService;
+    private final CustomUserDetailsService customUserDetailsService;
     private final LogPublisher logPublisher;
+    private final RoleService roleService;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -25,12 +25,12 @@ public class AuthenticationService {
         authRequest.setPassword(passwordEncoder.encode(authRequest.getPassword()));
         logPublisher.publishLog("User register request for email: " + authRequest.getEmail());
 
-        var newUser = new User();
+        User newUser = new User();
         newUser.setEmail(authRequest.getEmail());
         newUser.setPassword(authRequest.getPassword());
-        newUser.setRole(UserRole.USER);
+        newUser.setRole(roleService.findByName("ROLE_USER"));
 
-        var user = userRepositoryService.save(newUser);
+        User user = customUserDetailsService.save(newUser);
         Assert.notNull(user, "Failed to register user. Please try again later");
 
         String accessToken = jwtService.generate(user, "ACCESS");
@@ -40,7 +40,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse login(AuthenticationRequest authRequest) {
-        var user = userRepositoryService.findByEmail(authRequest.getEmail());
+        User user = customUserDetailsService.findByEmail(authRequest.getEmail());
         if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             String accessToken = jwtService.generate(user, "ACCESS");
             String refreshToken = jwtService.generate(user, "REFRESH");
