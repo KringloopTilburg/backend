@@ -1,11 +1,11 @@
 package nl.kringlooptilburg.authenticationservice.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Data
@@ -28,4 +28,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private UserRole role;
+
+    @Nullable
+    @Column(name = "business_id")
+    private Integer businessId;
 }
