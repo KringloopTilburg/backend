@@ -42,7 +42,6 @@ public class GatewayConfig {
                         .uri("http://localhost:8083"))
                 .route("businessservice", r -> r
                         .path("/business-service/**")
-                        .filters(f -> f.filter(authFilter))
                         .uri("http://localhost:8084"))
                 .build();
     }
