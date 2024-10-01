@@ -5,7 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import nl.kringlooptilburg.authenticationservice.model.User;
-import nl.kringlooptilburg.authenticationservice.model.UserRole;
+import nl.kringlooptilburg.authenticationservice.model.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class JwtServiceTests {
     @InjectMocks
     private JwtService jwtService;
     private Key key;
-    private String SECRET_KEY = "G7RtBxU4fVQx9z7vT1iX0WzQEQBmcCKb";
+    private final String SECRET_KEY = "G7RtBxU4fVQx9z7vT1iX0WzQEQBmcCKb";
 
 
     @BeforeEach
@@ -39,7 +39,7 @@ class JwtServiceTests {
     @DisplayName("Should generate valid access token")
     void testGenerateAccessToken() {
         // Arrange
-        User user = new User(1, "test@example.com", "password", UserRole.USER);
+        User user = new User(1, "test@example.com", "password", Role.USER);
 
         // Act
         String accessToken = jwtService.generate(user, "ACCESS");
@@ -52,7 +52,7 @@ class JwtServiceTests {
     @DisplayName("Should generate valid refresh token")
     void testGenerateRefreshToken() {
         // Arrange
-        User user = new User(1, "test@example.com", "password", UserRole.USER);
+        User user = new User(1, "test@example.com", "password", Role.USER);
 
         // Act
         String refreshToken = jwtService.generate(user, "REFRESH");
