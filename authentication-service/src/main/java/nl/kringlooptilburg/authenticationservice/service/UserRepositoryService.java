@@ -8,8 +8,6 @@ import nl.kringlooptilburg.authenticationservice.publisher.LogPublisher;
 import nl.kringlooptilburg.authenticationservice.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class UserRepositoryService {
@@ -19,12 +17,11 @@ public class UserRepositoryService {
 
 
     public User save(User user) {
-        if(userRepository.existsByEmail(user.getEmail())) {
+        if(userRepository.findByEmail(user.getEmail()) != null) {
             logPublisher.publishLog("User with email: " + user.getEmail() + " already exists.");
             throw new EmailAlreadyExistsException("Email address already exists.");
         }
-        var tmp =  userRepository.save(user);
-        return tmp;
+        return userRepository.save(user);
     }
 
     public User findByEmailAndPassword(String email, String password){

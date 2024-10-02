@@ -16,8 +16,8 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    private String SECRET_KEY = "G7RtBxU4fVQx9z7vT1iX0WzQEQBmcCKb";
-    private String EXPIRATIONTIME = "86400";
+    private final String SECRET_KEY = "G7RtBxU4fVQx9z7vT1iX0WzQEQBmcCKb";
+    private final String EXPIRATIONTIME = "86400";
 
     private Key key;
 
@@ -41,7 +41,7 @@ public class JwtService {
 
     public String generate(User user, String type) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", user.getUserId());
+        claims.put("id", user.getId());
         claims.put("role", user.getRole());
         return doGenerateToken(claims, user.getEmail(), type);
     }
