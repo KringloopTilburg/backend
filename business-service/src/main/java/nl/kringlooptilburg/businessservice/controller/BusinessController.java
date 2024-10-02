@@ -11,18 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/business-service")
+@RequestMapping("business-service/user")
 public class BusinessController {
 
     private BusinessService businessService;
-
     private Mapper<Business, BusinessDto> mapper;
 
     @Autowired
@@ -30,6 +28,7 @@ public class BusinessController {
 
     @PostMapping(path = "/business")
     public ResponseEntity<BusinessDto> createBusiness(@RequestBody BusinessDto businessDto) {
+        //TODO: validate kvk number
         Business productEntity = mapper.mapFrom(businessDto);
         Business savedProductEntity = businessService.createBusiness(productEntity);
         return new ResponseEntity<>(mapper.mapTo(savedProductEntity), HttpStatus.CREATED);
@@ -50,11 +49,5 @@ public class BusinessController {
             BusinessDto productDto = mapper.mapTo(productEntity);
             return new ResponseEntity<>(productDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @DeleteMapping(path = "/business/{businessId}")
-    public ResponseEntity deleteBusiness(@PathVariable("businessId") Integer productId) {
-        businessService.delete(productId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

@@ -13,9 +13,38 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 
+import java.util.List;
+
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
+    public enum Role {
+        USER,
+        ADMIN,
+
+        BUSINESS_OWNER,
+        BUSINESS_MANAGER,
+        BUSINESS_EDITOR,
+        BUSINESS_ORDER_PICKER,
+        BUSINESS_VIEWER;
+    }
+
+    private static final String[] BUSINESS_MEMBER_ROLES = new String[] {
+            Role.BUSINESS_OWNER.name(),
+            Role.BUSINESS_MANAGER.name(),
+            Role.BUSINESS_EDITOR.name(),
+            Role.BUSINESS_ORDER_PICKER.name(),
+            Role.BUSINESS_VIEWER.name(),
+            Role.ADMIN.name()
+    };
+
+
+    private static final String[] BUSINESS_EDITOR_ROLES = new String[] {
+            Role.BUSINESS_OWNER.name(),
+            Role.BUSINESS_MANAGER.name(),
+            Role.BUSINESS_EDITOR.name(),
+            Role.ADMIN.name()
+    };
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http,
@@ -29,16 +58,18 @@ public class SecurityConfig {
 
                 .pathMatchers("/auth/**").permitAll()
 
-                .pathMatchers("/product-service/**")
-                        .hasAnyRole(Role.USER.name(), Role.ADMIN.name())
+                .pathMatchers("/product-service/user/**").permitAll()
+
+                .pathMatchers("/product-service/business/**")
+                        .hasAnyRole(BUSINESS_EDITOR_ROLES)
+
+                .pathMatchers("/business-service/user/**").permitAll()
+
+                .pathMatchers("/business-service/owner/**")
+                        .hasAnyRole(Role.BUSINESS_OWNER.name(), Role.ADMIN.name())
 
                 .pathMatchers("/productimage-service/**")
-                        .hasAnyRole(Role.USER.name(), Role.ADMIN.name())
-
-                .pathMatchers("/business-service/**")
-                        .hasAnyRole(Role.BUSINESS_OWNER.name(), Role.BUSINESS_MANAGER.name(),
-                               Role.BUSINESS_EDITOR.name(), Role.BUSINESS_ORDER_PICKER.name(),
-                                Role.BUSINESS_VIEWER.name(), Role.ADMIN.name())
+                        .hasAnyRole(Role.ADMIN.name())
 
                 .anyExchange().authenticated())
             .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
@@ -47,16 +78,5 @@ public class SecurityConfig {
             .csrf(CsrfSpec::disable);
 
         return http.build();
-    }
-
-    private enum Role {
-        USER,
-        ADMIN,
-
-        BUSINESS_OWNER,
-        BUSINESS_MANAGER,
-        BUSINESS_EDITOR,
-        BUSINESS_ORDER_PICKER,
-        BUSINESS_VIEWER
     }
 }

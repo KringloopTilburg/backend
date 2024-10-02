@@ -25,9 +25,6 @@ public class GatewayConfig {
         return new CorsWebFilter(source);
     }
 
-    // http://localhost:8081 = voorbeeld lokaal draaiende service
-    // http://product-service = voorbeeld kubernetes cluster draaiende service (service referentie)
-    // http://productimage-service:8083 = voorbeeld docker container draaiende service
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
