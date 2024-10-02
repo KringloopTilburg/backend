@@ -37,6 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return user;
     }
 
+    /*
     public User findById(Integer id) throws IllegalAccessException {
         var user = userRepository.findById(id);
         if (user.isPresent()) {
@@ -45,6 +46,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new IllegalAccessException("User not found");
         }
     }
+
+     */
 
     public User findByEmail(String email) {
         var user = userRepository.findByEmail(email);
