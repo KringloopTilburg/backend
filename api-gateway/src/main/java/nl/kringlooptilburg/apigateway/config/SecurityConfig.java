@@ -18,32 +18,18 @@ import java.util.List;
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
-    public enum Role {
-        USER,
-        ADMIN,
 
-        BUSINESS_OWNER,
-        BUSINESS_MANAGER,
-        BUSINESS_EDITOR,
-        BUSINESS_ORDER_PICKER,
-        BUSINESS_VIEWER;
-    }
+    // TODO: add roles to common module instead of storing them here
+    private static final String ADMIN = "ADMIN";
+    private static final String BUSINESS_OWNER = "BUSINESS_OWNER";
+    private static final String BUSINESS_MANAGER = "BUSINESS_MANAGER";
+    private static final String BUSINESS_EDITOR = "BUSINESS_EDITOR";
 
-    private static final String[] BUSINESS_MEMBER_ROLES = new String[] {
-            Role.BUSINESS_OWNER.name(),
-            Role.BUSINESS_MANAGER.name(),
-            Role.BUSINESS_EDITOR.name(),
-            Role.BUSINESS_ORDER_PICKER.name(),
-            Role.BUSINESS_VIEWER.name(),
-            Role.ADMIN.name()
-    };
-
-
-    private static final String[] BUSINESS_EDITOR_ROLES = new String[] {
-            Role.BUSINESS_OWNER.name(),
-            Role.BUSINESS_MANAGER.name(),
-            Role.BUSINESS_EDITOR.name(),
-            Role.ADMIN.name()
+    private static final String[] BUSINESS_EDITORS = new String[] {
+            ADMIN,
+            BUSINESS_OWNER,
+            BUSINESS_MANAGER,
+            BUSINESS_EDITOR,
     };
 
     @Bean
@@ -61,15 +47,15 @@ public class SecurityConfig {
                 .pathMatchers("/product-service/user/**").permitAll()
 
                 .pathMatchers("/product-service/business/**")
-                        .hasAnyRole(BUSINESS_EDITOR_ROLES)
+                        .hasAnyRole(BUSINESS_EDITORS)
 
                 .pathMatchers("/business-service/user/**").permitAll()
 
                 .pathMatchers("/business-service/owner/**")
-                        .hasAnyRole(Role.BUSINESS_OWNER.name(), Role.ADMIN.name())
+                        .hasAnyRole(BUSINESS_OWNER, ADMIN)
 
                 .pathMatchers("/productimage-service/**")
-                        .hasAnyRole(Role.ADMIN.name())
+                        .hasAnyRole(ADMIN)
 
                 .anyExchange().authenticated())
             .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)

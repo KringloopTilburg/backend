@@ -21,6 +21,7 @@ public class BusinessOwnerController {
 
     @DeleteMapping(path = "/business/{businessId}")
     public ResponseEntity<Void> deleteBusiness(@PathVariable("businessId") Integer businessId) {
+        // TODO: verify that businessId equals sender's businessId
         businessService.delete(businessId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
