@@ -14,7 +14,6 @@ import org.springframework.data.cassandra.core.mapping.Table;
 public class User {
 
     @Id
-    private String id;
     private String email;
     private String password;
     private UserRole role;
