@@ -10,6 +10,8 @@ import nl.kringlooptilburg.authenticationservice.publisher.LogPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -26,6 +28,7 @@ public class AuthenticationService {
         logPublisher.publishLog("User register request for email: " + authRequest.getEmail());
 
         User newUser = new User();
+        newUser.setId(UUID.randomUUID().toString());
         newUser.setEmail(authRequest.getEmail());
         newUser.setPassword(authRequest.getPassword());
         newUser.setRole(roleService.findByName("ROLE_USER"));
