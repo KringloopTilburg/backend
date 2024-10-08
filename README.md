@@ -48,6 +48,14 @@ Een overzicht van deze services:
     </ul>
   </li>
   <li>
+    <a href="/business-service/README.md">Business Service</a>
+    <ul>
+      <li>
+        <p>Verantwoordelijk voor aanmaken (en valideren), verwijderen en ophalen van (één of alle) bedrijven.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
     <a href="/api-gateway/README.md">API Gateway</a>
     <ul>
       <li>
@@ -82,7 +90,8 @@ Hier een lijst van grote frameworks/technologiën die gebruikt worden binnen dit
 Instructies voor het opstarten van een service zijn te vinden in het gedeelte "Opstarten" in de README van een service.
 <ul>
   <li><a href="/product-service/README.md#opstarten">Product Service</a></li>
-  <li><a href="/api-gateway/README.md#opstarten">API Gateway</li>
+  <li><a href="/business-service/README.md#opstarten">Business Service</a></li>
+  <li><a href="/api-gateway/README.md#opstarten">API Gateway</a></li>
   <li><a href="/authentication-service/README.md#opstarten">Authentication Service</a></li>
 </ul>
 

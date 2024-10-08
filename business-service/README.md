@@ -5,7 +5,7 @@
     <img src="https://www.kringlooptilburg.nl/sites/default/files/logo--02.png" alt="Logo" height="150">
   </a>
 
-  <h3 align="center">Kringloop013 | Product Service</h3>
+  <h3 align="center">Kringloop013 | Business Service</h3>
 
   <p align="center">
     Backend project voor het duurzaamste en betrouwbaarste kringloop platform ooit.
@@ -32,7 +32,7 @@ En zorg dat je [Java 21](https://github.com/adoptium/temurin21-binaries/releases
 
 ### Bouwen
 Vervolgens bouw je het project.
-Start met `mvn clean` om de target directory (de build directory) op te schonen, vervolgens gebruik je `mvn install` om het project te bouwen. Hierna vind je in de `/product-service/target/` directory de `product-service.jar` als resultaat van de build.
+Start met `mvn clean` om de target directory (de build directory) op te schonen, vervolgens gebruik je `mvn install` om het project te bouwen. Hierna vind je in de `/business-service/target/` directory de `business-service.jar` als resultaat van de build.
 
 **Let op:** gebruik de maven commando's vanuit de goeie directory, als je vanuit de hoofdmap het commando uitvoert worden alle modules opgeschoond en gebouwd en dat duurt wel ff.
 
@@ -41,6 +41,6 @@ Om de business service lokaal te draaien hebben we een aantal andere services no
 Start deze op met het commando:
 `docker compose up`
 
-Daarna start je de product service zelf op d.m.v. de Dockerfile. Eerst bouw je deze met het commando `docker build -t product-service .` (let op de directory). Vervolgens start je de docker container op met `docker run -d product-service`.
+Daarna start je de business service zelf op d.m.v. de Dockerfile. Eerst bouw je deze met het commando `docker build -t business-service .` (let op de directory). Vervolgens start je de docker container op met `docker run -d business-service`.
 
 <p align="right">(<a href="#readme-top">terug naar boven</a>)</p>
