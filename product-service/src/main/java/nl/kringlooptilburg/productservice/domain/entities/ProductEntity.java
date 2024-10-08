@@ -21,6 +21,8 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_seq")
     private Integer productId;
 
+    private Integer businessId;
+
     private String name;
 
     private String description;

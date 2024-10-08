@@ -22,46 +22,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/product-service")
+@RequestMapping("product-service/user")
 public class ProductController {
 
     private ProductService productService;
 
     private Mapper<ProductEntity, ProductDto> productMapper;
 
-    private RabbitMQSender rabbitMQSender;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @PostMapping(path = "/products")
-    public ResponseEntity<ProductDto> createProduct(@RequestPart String productJson, @RequestPart("images") MultipartFile[] images) {
-        ProductDto productDto;
-
-        try {
-            productDto = objectMapper.readValue(productJson, ProductDto.class);
-
-            ProductEntity productEntity = productMapper.mapFrom(productDto);
-            ProductEntity savedProductEntity = productService.createProduct(productEntity);
-
-            List<ProductImageDto> productImagesDto = new ArrayList<>();
-            for (var image : images) {
-                var productImageDto = ProductImageDto.builder()
-                        .image(image.getBytes())
-                        .productId(savedProductEntity.getProductId())
-                        .title(image.getOriginalFilename())
-                        .build();
-                productImagesDto.add(productImageDto);
-            }
-            rabbitMQSender.sendImages(productImagesDto);
-
-            return new ResponseEntity<>(productMapper.mapTo(savedProductEntity), HttpStatus.CREATED);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @GetMapping(path = "/products")
+    @GetMapping(path = "/product")
     public List<ProductDto> listProducts() {
         List<ProductEntity> productEntities = productService.findAll();
         return productEntities.stream()
@@ -69,7 +37,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/products/{productId}")
+    @GetMapping(path = "/product/{productId}")
     public ResponseEntity<ProductDto> getProduct(@PathVariable("productId") Integer productId) {
         Optional<ProductEntity> foundProduct = productService.findOne(productId);
         return foundProduct.map(productEntity -> {
@@ -78,13 +46,7 @@ public class ProductController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @DeleteMapping(path = "/products/{productId}")
-    public ResponseEntity deleteProduct(@PathVariable("productId") Integer productId) {
-        productService.delete(productId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
-
-    @GetMapping(path = "/products/category/{category}")
+    @GetMapping(path = "/product/category/{category}")
     public List<ProductDto> listProductsByCategory(@PathVariable("category") String category) {
         List<ProductEntity> productEntities = productService.findAllByCategory(category);
         return productEntities.stream()
@@ -92,7 +54,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/products/price/{minPrice}/{maxPrice}")
+    @GetMapping(path = "/product/price/{minPrice}/{maxPrice}")
     public List<ProductDto> listProductsByPriceBetween(@PathVariable("minPrice") Double minPrice, @PathVariable("maxPrice") Double maxPrice) {
         List<ProductEntity> productEntities = productService.findAllByPriceBetween(minPrice, maxPrice);
         return productEntities.stream()
@@ -100,7 +62,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/products/price/{price}")
+    @GetMapping(path = "/product/price/{price}")
     public List<ProductDto> listProductsByPriceLessThan(@PathVariable("price") Double price) {
         List<ProductEntity> productEntities = productService.priceLessThan(price);
         return productEntities.stream()
@@ -108,7 +70,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/products/brand/{brand}")
+    @GetMapping(path = "/product/brand/{brand}")
     public List<ProductDto> listProductsByBrand(@PathVariable("brand") String brand) {
         List<ProductEntity> productEntities = productService.findAllByBrand(brand);
         return productEntities.stream()
@@ -116,7 +78,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/products/size/{size}")
+    @GetMapping(path = "/product/size/{size}")
     public List<ProductDto> listProductsBySize(@PathVariable("size") String size) {
         List<ProductEntity> productEntities = productService.findAllBySize(size);
         return productEntities.stream()
@@ -124,7 +86,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/products/material/{material}")
+    @GetMapping(path = "/product/material/{material}")
     public List<ProductDto> listProductsByMaterial(@PathVariable("material") String material) {
         List<ProductEntity> productEntities = productService.findAllByMaterial(material);
         return productEntities.stream()
@@ -132,7 +94,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/products/product-condition/{productCondition}")
+    @GetMapping(path = "/product/product-condition/{productCondition}")
     public List<ProductDto> listProductsByProductCondition(@PathVariable("productCondition") String productCondition) {
         List<ProductEntity> productEntities = productService.findAllByProductCondition(productCondition);
         return productEntities.stream()
@@ -140,7 +102,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/products/audience/{audience}")
+    @GetMapping(path = "/product/audience/{audience}")
     public List<ProductDto> listProductsByAudience(@PathVariable("audience") String audience) {
         List<ProductEntity> productEntities = productService.findAllByAudience(audience);
         return productEntities.stream()

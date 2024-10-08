@@ -13,9 +13,24 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 
+import java.util.List;
+
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
+
+    // TODO: add roles to common module instead of storing them here
+    private static final String ADMIN = "ADMIN";
+    private static final String BUSINESS_OWNER = "BUSINESS_OWNER";
+    private static final String BUSINESS_MANAGER = "BUSINESS_MANAGER";
+    private static final String BUSINESS_EDITOR = "BUSINESS_EDITOR";
+
+    private static final String[] BUSINESS_EDITORS = new String[] {
+            ADMIN,
+            BUSINESS_OWNER,
+            BUSINESS_MANAGER,
+            BUSINESS_EDITOR,
+    };
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http,
@@ -26,9 +41,22 @@ public class SecurityConfig {
         authenticationWebFilter.setServerAuthenticationConverter(authenticationConverter);
 
         http.authorizeExchange(authorizeRequests -> authorizeRequests
+
                 .pathMatchers("/auth/**").permitAll()
-                .pathMatchers("/product-service/**").hasAnyRole("USER", "ADMIN")
-                .pathMatchers("/productimage-service/**").hasAnyRole("USER", "ADMIN")
+
+                .pathMatchers("/product-service/user/**").permitAll()
+
+                .pathMatchers("/product-service/business/**")
+                        .hasAnyRole(BUSINESS_EDITORS)
+
+                .pathMatchers("/business-service/user/**").permitAll()
+
+                .pathMatchers("/business-service/owner/**")
+                        .hasAnyRole(BUSINESS_OWNER, ADMIN)
+
+                .pathMatchers("/productimage-service/**")
+                        .hasAnyRole(ADMIN)
+
                 .anyExchange().authenticated())
             .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
             .httpBasic(HttpBasicSpec::disable)
