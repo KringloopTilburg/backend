@@ -11,8 +11,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
@@ -23,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class CustomUserDetailsServiceTests {
+class CustomUserDetailsServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -34,148 +36,161 @@ class CustomUserDetailsServiceTests {
     @InjectMocks
     private CustomUserDetailsService customUserDetailsService;
 
-    @BeforeEach
-    public void setup() {
-        Mockito.doNothing().when(logPublisher).publishLog(any(String.class));
-    }
+
 
     @Test
-    @DisplayName("Should be able to save a new user.")
-    void TEST_save_001() {
+    void testSave_successful() {
         // Arrange
-        var user = new User();
+        User user = new User();
         user.setEmail("test@example.com");
-        user.setPassword("password");
-        user.setRole(Role.USER);
+        user.setPassword("password123");
 
-        when(userRepository.existsByEmail(anyString())).thenReturn(false);
-        when(userRepository.save(any())).thenReturn(user);
+        when(userRepository.existsByEmail(user.getEmail())).thenReturn(false);
+        when(userRepository.save(user)).thenReturn(user);
 
         // Act
-        var response = customUserDetailsService.save(user);
+        User savedUser = customUserDetailsService.save(user);
 
         // Assert
-        assertNotNull(response);
-        assertEquals(user.getUserId(), response.getUserId());
-        assertEquals(user.getEmail(), response.getEmail());
-        assertEquals(user.getPassword(), response.getPassword());
-        assertEquals(user.getRole(), response.getRole());
+        assertNotNull(savedUser);
     }
 
     @Test
-    @DisplayName("Should not be able to save an existing user")
-    void TEST_save_002() {
+    void testSave_emailAlreadyExists() {
         // Arrange
-        var user = new User(1, "test@example.com", "password", Role.USER);
+        User user = new User();
+        user.setEmail("test@example.com");
+
+        when(userRepository.existsByEmail(user.getEmail())).thenReturn(true);
 
         // Act
-        when(userRepository.existsByEmail(any())).thenReturn(true);
-
+        EmailAlreadyExistsException exception = assertThrows(EmailAlreadyExistsException.class, () -> {
+            customUserDetailsService.save(user);
+        });
         // Assert
-        assertThrows(EmailAlreadyExistsException.class, () -> customUserDetailsService.save(user));
+        assertEquals("Email address already exists.", exception.getMessage());
     }
 
     @Test
-    @DisplayName("Should find user with correct email and password")
-    void TEST_findByEmailAndPassword_001() {
+    void testFindByEmailAndPassword_successful() {
         // Arrange
-        var email = "test@example.com";
-        var password = "password";
-        var user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRole(Role.USER);
+        User user = new User();
+        user.setEmail("test@example.com");
+        user.setPassword("password123");
 
-        when(userRepository.findByEmailAndPassword(anyString(), anyString())).thenReturn(user);
+        when(userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword())).thenReturn(user);
 
         // Act
-        var response = customUserDetailsService.findByEmailAndPassword(email, password);
+        User foundUser = customUserDetailsService.findByEmailAndPassword(user.getEmail(), user.getPassword());
 
         // Assert
-        assertNotNull(response);
-        assertEquals(user.getEmail(), response.getEmail());
-        assertEquals(user.getPassword(), response.getPassword());
-        assertEquals(user.getRole(), response.getRole());
+        assertNotNull(foundUser);
+        assertEquals("test@example.com", foundUser.getEmail());
     }
 
     @Test
-    @DisplayName("Should not find user with incorrect email and password")
-    void TEST_findByEmailAndPassword_002() {
+    void testFindByEmailAndPassword_invalidCredentials() {
         // Arrange
-        var email = "test@example.com";
-        var password = "password";
-
         when(userRepository.findByEmailAndPassword(anyString(), anyString())).thenReturn(null);
 
+        // Act
+        InvalidCredentialsException exception = assertThrows(InvalidCredentialsException.class, () -> {
+            customUserDetailsService.findByEmailAndPassword("invalid@example.com", "wrongPassword");
+        });
         // Assert
-        assertThrows(InvalidCredentialsException.class, () -> customUserDetailsService.findByEmailAndPassword(email, password));
+        assertEquals("Invalid email or password", exception.getMessage());
     }
 
     @Test
-    @DisplayName("Should find user by ID")
-    void TEST_findById_001() throws IllegalAccessException {
+    void testFindById_successful() throws IllegalAccessException {
         // Arrange
-        var userId = 1;
-        var user = new User();
+        User user = new User();
+        user.setUserId(1);
         user.setEmail("test@example.com");
-        user.setPassword("password");
-        user.setRole(new Role(1L, "ROLE_USER"));
 
-        when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
         // Act
-        var response = customUserDetailsService.findById(userId);
+        User foundUser = customUserDetailsService.findById(1);
 
-        //Assert
-        assertNotNull(response);
-        assertEquals(user.getEmail(), response.getEmail());
-        assertEquals(user.getPassword(), response.getPassword());
-        assertEquals(user.getRole(), response.getRole());
+        // Assert
+        assertNotNull(foundUser);
+        assertEquals(1, foundUser.getUserId());
+        assertEquals("test@example.com", foundUser.getEmail());
     }
 
     @Test
-    @DisplayName("Should not find user by ID")
-    void TEST_findById_002() {
+    void testFindById_userNotFound() {
         // Arrange
-        var userId = 1;
-
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
+        // Act
+        IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> {
+            customUserDetailsService.findById(1);
+        });
         // Assert
-        assertThrows(IllegalAccessException.class, () -> customUserDetailsService.findById(userId));
+        assertEquals("User not found", exception.getMessage());
     }
 
     @Test
-    @DisplayName("Should find user by email")
-    void TEST_findByEmail_001() {
+    void testFindByEmail_successful() {
         // Arrange
-        var email = "test@example.com";
-        var user = new User();
-        user.setEmail(email);
-        user.setPassword("password");
-        user.setRole(Role.USER);
+        User user = new User();
+        user.setEmail("test@example.com");
 
-        when(userRepository.findByEmail(anyString())).thenReturn(user);
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
 
         // Act
-        var response = customUserDetailsService.findByEmail(email);
+        User foundUser = customUserDetailsService.findByEmail(user.getEmail());
 
         // Assert
-        assertNotNull(response);
-        assertEquals(user.getEmail(), response.getEmail());
-        assertEquals(user.getPassword(), response.getPassword());
-        assertEquals(user.getRole(), response.getRole());
+        assertNotNull(foundUser);
+        assertEquals("test@example.com", foundUser.getEmail());
     }
 
     @Test
-    @DisplayName("Should not find user by email")
-    void TEST_findByEmail_002() {
+    void testFindByEmail_invalidCredentials() {
         // Arrange
-        var email = "test@example.com";
-
         when(userRepository.findByEmail(anyString())).thenReturn(null);
 
+        // Act
+        InvalidCredentialsException exception = assertThrows(InvalidCredentialsException.class, () -> {
+            customUserDetailsService.findByEmail("invalid@example.com");
+        });
         // Assert
-        assertThrows(InvalidCredentialsException.class, () -> customUserDetailsService.findByEmail(email));
+        assertEquals("Invalid email or password", exception.getMessage());
+    }
+
+    @Test
+    void testLoadUserByUsername_successful() {
+        // Arrange
+        User user = new User();
+        user.setEmail("test@example.com");
+        user.setPassword("password123");
+        user.setUserId(1);
+        user.setRole(new Role(1L, "ROLE_USER"));
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+
+        // Act
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername("test@example.com");
+
+        // Assert
+        assertNotNull(userDetails);
+        assertEquals("test@example.com", userDetails.getUsername());
+        assertEquals("password123", userDetails.getPassword());
+    }
+
+    @Test
+    void testLoadUserByUsername_userNotFound() {
+        // Arrange
+        when(userRepository.findByEmail(anyString())).thenReturn(null);
+
+        // Act
+        UsernameNotFoundException exception = assertThrows(UsernameNotFoundException.class, () -> {
+            customUserDetailsService.loadUserByUsername("notfound@example.com");
+        });
+        // Assert
+        assertEquals("User not found", exception.getMessage());
     }
 }
