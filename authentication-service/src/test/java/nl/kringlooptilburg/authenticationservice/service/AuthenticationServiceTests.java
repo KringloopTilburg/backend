@@ -6,24 +6,17 @@ import nl.kringlooptilburg.authenticationservice.model.AuthenticationResponse;
 import nl.kringlooptilburg.authenticationservice.model.User;
 import nl.kringlooptilburg.authenticationservice.model.Role;
 import nl.kringlooptilburg.authenticationservice.publisher.LogPublisher;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -33,8 +26,6 @@ class AuthenticationServiceTests {
     private JwtService jwtService;
     @Mock
     private CustomUserDetailsService customUserDetailsService;
-    @Mock
-    private LogPublisher logPublisher;
     @Mock
     private RoleService roleService;
     @Mock

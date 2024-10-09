@@ -2,12 +2,9 @@ package nl.kringlooptilburg.authenticationservice.service;
 
 import nl.kringlooptilburg.authenticationservice.model.Role;
 import nl.kringlooptilburg.authenticationservice.repository.RoleRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 

@@ -6,12 +6,9 @@ import nl.kringlooptilburg.authenticationservice.model.User;
 import nl.kringlooptilburg.authenticationservice.model.Role;
 import nl.kringlooptilburg.authenticationservice.publisher.LogPublisher;
 import nl.kringlooptilburg.authenticationservice.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,8 +27,6 @@ class CustomUserDetailsServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private LogPublisher logPublisher;
 
     @InjectMocks
     private CustomUserDetailsService customUserDetailsService;
