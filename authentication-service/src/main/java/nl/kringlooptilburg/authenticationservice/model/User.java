@@ -1,5 +1,6 @@
 package nl.kringlooptilburg.authenticationservice.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +26,12 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
+    
+    @Nullable
+    @Column(name = "business_id")
+    private Integer businessId;
 }

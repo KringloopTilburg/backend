@@ -16,6 +16,8 @@ public class ProductDto {
 
     private Integer productId;
 
+    private Integer businessId;
+
     private String name;
 
     private String description;
