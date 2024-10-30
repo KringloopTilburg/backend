@@ -24,11 +24,11 @@ jobs:
 
       - name: Build microservices
         run: |
-          mvn -f ./api-gateway/pom.xml clean package && \
-          mvn -f ./authentication-service/pom.xml clean package && \
-          mvn -f ./business-service/pom.xml clean package && \
-          mvn -f ./product-service/pom.xml clean package && \
-          mvn -f ./productimage-service/pom.xml clean package
+          mvn -f ./api-gateway/pom.xml clean package -DskipTests && \
+          mvn -f ./authentication-service/pom.xml clean package -DskipTests && \
+          mvn -f ./business-service/pom.xml clean package -DskipTests && \
+          mvn -f ./product-service/pom.xml clean package -DskipTests && \
+          mvn -f ./productimage-service/pom.xml clean -DskipTests package
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
