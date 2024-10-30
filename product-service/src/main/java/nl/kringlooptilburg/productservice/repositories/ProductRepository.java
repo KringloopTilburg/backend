@@ -1,13 +1,14 @@
 package nl.kringlooptilburg.productservice.repositories;
 
+import java.util.UUID;
 import nl.kringlooptilburg.productservice.domain.entities.ProductEntity;
-import nl.kringlooptilburg.productservice.domain.entities.enums.*;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import nl.kringlooptilburg.productservice.domain.entities.enums.Audience;
+import nl.kringlooptilburg.productservice.domain.entities.enums.Brand;
+import nl.kringlooptilburg.productservice.domain.entities.enums.Material;
+import nl.kringlooptilburg.productservice.domain.entities.enums.ProductCondition;
+import org.springframework.data.cassandra.repository.CassandraRepository;
 
-@Repository
-public interface ProductRepository extends CrudRepository<ProductEntity, Integer>{
+public interface ProductRepository extends CassandraRepository<ProductEntity, UUID> {
     Iterable<ProductEntity> findAllByCategory(String category);
     Iterable<ProductEntity> findAllByPriceBetween(Double minPrice, Double maxPrice);
     Iterable<ProductEntity> priceLessThan(Double price);
@@ -16,6 +17,4 @@ public interface ProductRepository extends CrudRepository<ProductEntity, Integer
     Iterable<ProductEntity> findAllByMaterial(Material material);
     Iterable<ProductEntity> findAllByProductCondition(ProductCondition productCondition);
     Iterable<ProductEntity> findAllByAudience(Audience audience);
-    @Query("SELECT pc.colorId FROM ProductEntity p JOIN p.colors pc WHERE p.productId = :productId")
-    Iterable<Integer> findColorIdsByProductId(Integer productId);
 }

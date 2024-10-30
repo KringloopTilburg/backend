@@ -1,5 +1,7 @@
 package nl.kringlooptilburg.productservice;
 
+import java.util.UUID;
+import java.util.stream.Collectors;
 import nl.kringlooptilburg.productservice.domain.entities.ColorEntity;
 import nl.kringlooptilburg.productservice.domain.entities.ProductEntity;
 import nl.kringlooptilburg.productservice.domain.entities.enums.*;
@@ -13,43 +15,43 @@ public class TestDataUtil {
 
     public static ProductEntity createTestProductEntityA(){
         Set<ColorEntity> colors = new HashSet<>();
-        Set<ProductEntity> emptyProductSet = new HashSet<>();
-        colors.add(new ColorEntity(1, Color.BLACK, emptyProductSet));
-        colors.add(new ColorEntity(11, Color.GREY, emptyProductSet));
+        Set<UUID> emptyProductSet = new HashSet<>();
+        colors.add(new ColorEntity(UUID.randomUUID(), Color.BLACK.name(), emptyProductSet));
+        colors.add(new ColorEntity(UUID.randomUUID(), Color.GREY.name(), emptyProductSet));
 
         return ProductEntity.builder()
-                .productId(1)
+                .productId(UUID.randomUUID())
                 .name("Grey Ripped Jeans")
                 .description("Good condition, size L, grey ripped Jeans.")
                 .price(30.0)
-                .brand(Brand.ADIDAS)
+                .brand(Brand.ADIDAS.name())
                 .category("Jeans")
                 .size("L")
-                .material(Material.ACRYLIC)
-                .productCondition(ProductCondition.GOOD)
-                .colors(colors)
-                .audience(Audience.MALE)
+                .material(Material.ACRYLIC.name())
+                .productCondition(ProductCondition.GOOD.name())
+                .colors(colors.stream().map(ColorEntity::getColorId).collect(Collectors.toSet()))
+                .audience(Audience.MALE.name())
                 .build();
     }
 
     public static ProductEntity createTestProductEntityB(){
-        Set<ColorEntity> colors = new HashSet<>();
+        Set<UUID> colors = new HashSet<>();
         Set<ProductEntity> emptyProductSet = new HashSet<>();
-        colors.add(new ColorEntity(2, Color.WHITE, emptyProductSet));
-        colors.add(new ColorEntity(6, Color.YELLOW, emptyProductSet));
+        colors.add(UUID.randomUUID());
+        colors.add(UUID.randomUUID());
 
         return ProductEntity.builder()
-                .productId(2)
+                .productId(UUID.randomUUID())
                 .name("Colourful Jacket")
                 .description("New, size M, colourful jacket.")
                 .price(20.0)
-                .brand(Brand.ZARA)
+                .brand(Brand.ZARA.name())
                 .category("Outerwear")
                 .size("M")
-                .material(Material.COTTON)
-                .productCondition(ProductCondition.NEW)
+                .material(Material.COTTON.name())
+                .productCondition(ProductCondition.NEW.name())
                 .colors(colors)
-                .audience(Audience.FEMALE)
+                .audience(Audience.FEMALE.name())
                 .build();
     }
 

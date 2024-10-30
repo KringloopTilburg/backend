@@ -1,24 +1,20 @@
 package nl.kringlooptilburg.productservice.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import nl.kringlooptilburg.productservice.domain.dto.ProductDto;
-import nl.kringlooptilburg.productservice.domain.dto.ProductImageDto;
 import nl.kringlooptilburg.productservice.domain.entities.ProductEntity;
 import nl.kringlooptilburg.productservice.mappers.Mapper;
 import nl.kringlooptilburg.productservice.services.ProductService;
-import nl.kringlooptilburg.productservice.services.rabbit.RabbitMQSender;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
@@ -38,8 +34,8 @@ public class ProductController {
     }
 
     @GetMapping(path = "/product/{productId}")
-    public ResponseEntity<ProductDto> getProduct(@PathVariable("productId") Integer productId) {
-        Optional<ProductEntity> foundProduct = productService.findOne(productId);
+    public ResponseEntity<ProductDto> getProduct(@PathVariable("productId") String productId) {
+        Optional<ProductEntity> foundProduct = productService.findOne(UUID.fromString(productId));
         return foundProduct.map(productEntity -> {
             ProductDto productDto = productMapper.mapTo(productEntity);
             return new ResponseEntity<>(productDto, HttpStatus.OK);

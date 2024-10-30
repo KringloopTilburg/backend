@@ -1,5 +1,6 @@
 package nl.kringlooptilburg.productservice.services;
 
+import java.util.UUID;
 import nl.kringlooptilburg.productservice.domain.entities.ProductEntity;
 
 import java.util.List;
@@ -10,9 +11,9 @@ public interface ProductService {
 
     List<ProductEntity> findAll();
 
-    Optional<ProductEntity> findOne(Integer productId);
+    Optional<ProductEntity> findOne(UUID productId);
 
-    void delete(Integer productId);
+    void delete(UUID productId);
 
     List<ProductEntity> findAllByCategory(String category);
 

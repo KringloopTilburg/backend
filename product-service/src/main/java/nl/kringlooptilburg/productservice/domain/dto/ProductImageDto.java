@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class ProductImageDto implements Serializable {
-    private Integer productId;
+    private String productId;
     private String title;
     private byte[] image;
 }

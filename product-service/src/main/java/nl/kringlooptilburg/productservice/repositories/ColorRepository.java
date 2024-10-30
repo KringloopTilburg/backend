@@ -1,11 +1,11 @@
 package nl.kringlooptilburg.productservice.repositories;
 
+import java.util.UUID;
 import nl.kringlooptilburg.productservice.domain.entities.ColorEntity;
-import nl.kringlooptilburg.productservice.domain.entities.enums.Color;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.data.cassandra.repository.Query;
 
-@Repository
-public interface ColorRepository extends CrudRepository<ColorEntity, Integer> {
-    ColorEntity findByColor(Color color);
+public interface ColorRepository extends CassandraRepository<ColorEntity, UUID> {
+    @Query(value = "SELECT * FROM color WHERE color = ?0 LIMIT 1 ALLOW FILTERING")
+    ColorEntity findByColor(String color);
 }

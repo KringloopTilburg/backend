@@ -1,5 +1,6 @@
 package nl.kringlooptilburg.productservice.services.impl;
 
+import java.util.UUID;
 import nl.kringlooptilburg.productservice.domain.entities.ColorEntity;
 import nl.kringlooptilburg.productservice.domain.entities.enums.Color;
 import nl.kringlooptilburg.productservice.repositories.ColorRepository;
@@ -18,11 +19,11 @@ public class ColorServiceImpl implements ColorService {
 
     @Override
     public ColorEntity findOneByColor(Color color) {
-        return colorRepository.findByColor(color);
+        return colorRepository.findByColor(color.name());
     }
 
     @Override
-    public Optional<ColorEntity> findById(Integer colorId) {
+    public Optional<ColorEntity> findById(UUID colorId) {
         return colorRepository.findById(colorId);
     }
 }

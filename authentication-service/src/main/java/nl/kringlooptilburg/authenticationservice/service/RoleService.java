@@ -1,5 +1,6 @@
 package nl.kringlooptilburg.authenticationservice.service;
 
+import java.util.UUID;
 import nl.kringlooptilburg.authenticationservice.model.Role;
 import nl.kringlooptilburg.authenticationservice.repository.RoleRepository;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class RoleService {
     private void createRoleIfNotFound(String name) {
         if(roleRepository.findByName(name).isEmpty()) {
             Role role = new Role();
+            role.setId(UUID.randomUUID());
             role.setName(name);
             roleRepository.save(role);
         }

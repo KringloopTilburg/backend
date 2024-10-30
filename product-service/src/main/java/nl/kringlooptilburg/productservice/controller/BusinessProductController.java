@@ -1,6 +1,7 @@
 package nl.kringlooptilburg.productservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import nl.kringlooptilburg.productservice.domain.dto.ProductDto;
 import nl.kringlooptilburg.productservice.domain.dto.ProductImageDto;
@@ -44,13 +45,14 @@ public class BusinessProductController {
             }
 
             ProductEntity productEntity = productMapper.mapFrom(productDto);
+            productEntity.setProductId(UUID.randomUUID());
             ProductEntity savedProductEntity = productService.createProduct(productEntity);
 
             List<ProductImageDto> productImagesDto = new ArrayList<>();
             for (var image : images) {
                 var productImageDto = ProductImageDto.builder()
                         .image(image.getBytes())
-                        .productId(savedProductEntity.getProductId())
+                        .productId(savedProductEntity.getProductId().toString())
                         .title(image.getOriginalFilename())
                         .build();
                 productImagesDto.add(productImageDto);
@@ -64,8 +66,8 @@ public class BusinessProductController {
     }
 
     @DeleteMapping(path = "/product/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable("productId") Integer productId) {
-        productService.delete(productId);
+    public ResponseEntity<Void> deleteProduct(@PathVariable("productId") String productId) {
+        productService.delete(UUID.fromString(productId));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

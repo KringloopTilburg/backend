@@ -5,6 +5,8 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Performance Thread Group">
@@ -21,7 +23,7 @@
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP GET Request (messages)">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">8082</stringProp>
-          <stringProp name="HTTPSampler.path">/product-service/products</stringProp>
+          <stringProp name="HTTPSampler.path">/product-service/user/product</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -71,45 +73,45 @@
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP POST Request (messages)">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">8082</stringProp>
-          <stringProp name="HTTPSampler.path">/product-service/products</stringProp>
+          <stringProp name="HTTPSampler.path">/product-service/business/product</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+          <elementProp name="HTTPsampler.Files" elementType="HTTPFileArgs">
+            <collectionProp name="HTTPFileArgs.files">
+              <elementProp name="/Users/abevriens/Downloads/shirt.webp" elementType="HTTPFileArg">
+                <stringProp name="File.mimetype">application/octet-stream</stringProp>
+                <stringProp name="File.path">/Users/abevriens/Downloads/shirt.webp</stringProp>
+                <stringProp name="File.paramname">images</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
             <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
+              <elementProp name="productJson" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
-  &quot;name&quot;: &quot;Grey Ripped Jeans&quot;,&#xd;
-  &quot;description&quot;: &quot;Good condition, size L, grey ripped Jeans.&quot;,&#xd;
-  &quot;price&quot;: 30.0,&#xd;
-  &quot;brand&quot;: &quot;H&amp;M&quot;,&#xd;
-  &quot;category&quot;: &quot;Jeans&quot;,&#xd;
-  &quot;size&quot;: &quot;L&quot;,&#xd;
-  &quot;material&quot;: &quot;Acrylic&quot;,&#xd;
-  &quot;productCondition&quot;: &quot;Good&quot;,&#xd;
-  &quot;color&quot;: &quot;Grey&quot;,&#xd;
-  &quot;audience&quot;: &quot;Male&quot;&#xd;
-}</stringProp>
+                <stringProp name="Argument.value">{     &quot;businessId&quot;: 1,     &quot;name&quot;: &quot;T-Shirt&quot;,     &quot;description&quot;: &quot;Een heel mooi Shirt.&quot;,     &quot;price&quot;: 9.99,     &quot;brand&quot;: &quot;TOMMY_HILFIGER&quot;,     &quot;category&quot;: &quot;Shirts&quot;,     &quot;size&quot;: &quot;M&quot;,     &quot;material&quot;: &quot;POLYESTER&quot;,     &quot;productCondition&quot;: &quot;GOOD&quot;,     &quot;colors&quot;: [         &quot;WHITE&quot;,         &quot;PINK&quot;     ],     &quot;audience&quot;: &quot;UNISEX&quot; }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">productJson</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">content-Type</stringProp>
-                <stringProp name="Header.value">application/json</stringProp>
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwiaWQiOiJ0ZXN0QGdtYWlsLmNvbSIsImV4cCI6MTczMDM4MTM4MH0.fiHc2KtOAUh44SLW__q3r-HmLi2H3q-wkmljbrhdxTw</stringProp>
               </elementProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Load Testing Thread Group" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Load Testing Thread Group">
         <intProp name="ThreadGroup.num_threads">100</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -123,7 +125,7 @@
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP GET Request (messages)">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">8082</stringProp>
-          <stringProp name="HTTPSampler.path">/product-service/products</stringProp>
+          <stringProp name="HTTPSampler.path">/product-service/user/product</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -173,38 +175,43 @@
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP POST Request (messages)">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">8082</stringProp>
-          <stringProp name="HTTPSampler.path">/product-service/products</stringProp>
+          <stringProp name="HTTPSampler.path">/product-service/business/product</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+          <elementProp name="HTTPsampler.Files" elementType="HTTPFileArgs">
+            <collectionProp name="HTTPFileArgs.files">
+              <elementProp name="/Users/abevriens/Downloads/shirt.webp" elementType="HTTPFileArg">
+                <stringProp name="File.mimetype">application/octet-stream</stringProp>
+                <stringProp name="File.path">/Users/abevriens/Downloads/shirt.webp</stringProp>
+                <stringProp name="File.paramname">images</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
             <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
+              <elementProp name="productJson" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
-  &quot;name&quot;: &quot;Grey Ripped Jeans&quot;,&#xd;
-  &quot;description&quot;: &quot;Good condition, size L, grey ripped Jeans.&quot;,&#xd;
-  &quot;price&quot;: 30.0,&#xd;
-  &quot;brand&quot;: &quot;H&amp;M&quot;,&#xd;
-  &quot;category&quot;: &quot;Jeans&quot;,&#xd;
-  &quot;size&quot;: &quot;L&quot;,&#xd;
-  &quot;material&quot;: &quot;Acrylic&quot;,&#xd;
-  &quot;productCondition&quot;: &quot;Good&quot;,&#xd;
-  &quot;color&quot;: &quot;Grey&quot;,&#xd;
-  &quot;audience&quot;: &quot;Male&quot;&#xd;
-}</stringProp>
+                <stringProp name="Argument.value">{     &quot;businessId&quot;: 1,     &quot;name&quot;: &quot;T-Shirt&quot;,     &quot;description&quot;: &quot;Een heel mooi Shirt.&quot;,     &quot;price&quot;: 9.99,     &quot;brand&quot;: &quot;TOMMY_HILFIGER&quot;,     &quot;category&quot;: &quot;Shirts&quot;,     &quot;size&quot;: &quot;M&quot;,     &quot;material&quot;: &quot;POLYESTER&quot;,     &quot;productCondition&quot;: &quot;GOOD&quot;,     &quot;colors&quot;: [         &quot;WHITE&quot;,         &quot;PINK&quot;     ],     &quot;audience&quot;: &quot;UNISEX&quot; }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">productJson</stringProp>
+                <stringProp name="HTTPArgument.content_type">text/plain</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-Type</stringProp>
                 <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwiaWQiOiJ0ZXN0QGdtYWlsLmNvbSIsImV4cCI6MTczMDM4MTM4MH0.fiHc2KtOAUh44SLW__q3r-HmLi2H3q-wkmljbrhdxTw</stringProp>
               </elementProp>
             </collectionProp>
           </HeaderManager>

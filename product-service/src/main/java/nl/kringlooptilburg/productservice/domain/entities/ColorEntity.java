@@ -1,27 +1,31 @@
 package nl.kringlooptilburg.productservice.domain.entities;
 
-import jakarta.persistence.*;
+import java.util.UUID;
 import lombok.*;
-import nl.kringlooptilburg.productservice.domain.entities.enums.Color;
 
 import java.util.Set;
+import org.springframework.data.cassandra.core.mapping.CassandraType;
+import org.springframework.data.cassandra.core.mapping.CassandraType.Name;
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "colors")
+@Table("color")
 public class ColorEntity {
+    @PrimaryKey("color_id")
+    @Column("color_id")
+    @CassandraType(type = Name.UUID)
+    private UUID colorId;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "color_id_seq")
-    private Integer colorId;
-
-    @Enumerated(EnumType.STRING)
-    private Color color;
+    @CassandraType(type = Name.TEXT)
+    private String color;
 
     @EqualsAndHashCode.Exclude
-    @ManyToMany(mappedBy = "colors")
-    private Set<ProductEntity> products;
+    @Column("products")
+    @CassandraType(type = CassandraType.Name.SET, typeArguments = CassandraType.Name.UUID)
+    private Set<UUID> products;
 }

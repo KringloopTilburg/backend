@@ -1,19 +1,20 @@
 package nl.kringlooptilburg.productservice.services.impl;
 
-import nl.kringlooptilburg.productservice.domain.entities.ColorEntity;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import nl.kringlooptilburg.productservice.domain.entities.ProductEntity;
-import nl.kringlooptilburg.productservice.domain.entities.enums.*;
+import nl.kringlooptilburg.productservice.domain.entities.enums.Audience;
+import nl.kringlooptilburg.productservice.domain.entities.enums.Brand;
+import nl.kringlooptilburg.productservice.domain.entities.enums.Material;
+import nl.kringlooptilburg.productservice.domain.entities.enums.ProductCondition;
 import nl.kringlooptilburg.productservice.repositories.ProductRepository;
 import nl.kringlooptilburg.productservice.services.ColorService;
 import nl.kringlooptilburg.productservice.services.ProductService;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -25,16 +26,6 @@ public class ProductServiceImpl implements ProductService {
         this.colorService = colorService;
     }
 
-    private void setColorsForProduct(ProductEntity productEntity) {
-        Iterable<Integer> colorIds = productRepository.findColorIdsByProductId(productEntity.getProductId());
-        Set<ColorEntity> colors = new HashSet<>();
-        for (Integer colorId : colorIds) {
-            Optional<ColorEntity> colorEntity = colorService.findById(colorId);
-            colorEntity.ifPresent(colors::add);
-        }
-        productEntity.setColors(colors);
-    }
-
     @Override
     public ProductEntity createProduct(ProductEntity productEntity) {
         return productRepository.save(productEntity);
@@ -42,88 +33,60 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductEntity> findAll() {
-        List<ProductEntity> products = StreamSupport.stream(productRepository.findAll().spliterator(), false).collect(Collectors.toList());
-        products.forEach(this::setColorsForProduct);
-        return products;
+        return new ArrayList<>(productRepository.findAll());
     }
 
     @Override
-    public Optional<ProductEntity> findOne(Integer productId) {
-        Optional<ProductEntity> productEntity = productRepository.findById(productId);
-        if (productEntity.isPresent()) {
-            Iterable<Integer> colorIds = productRepository.findColorIdsByProductId(productId);
-            Set<ColorEntity> colors = new HashSet<>();
-            for (Integer colorId : colorIds) {
-                Optional<ColorEntity> colorEntity = colorService.findById(colorId);
-                colorEntity.ifPresent(colors::add);
-            }
-            productEntity.get().setColors(colors);
-        }
-        return productEntity;
+    public Optional<ProductEntity> findOne(UUID productId) {
+        return productRepository.findById(productId);
     }
 
     @Override
-    public void delete(Integer productId) {
+    public void delete(UUID productId) {
         productRepository.deleteById(productId);
     }
 
     @Override
     public List<ProductEntity> findAllByCategory(String category) {
-        List<ProductEntity> products = StreamSupport.stream(productRepository.findAllByCategory(category).spliterator(), false).collect(Collectors.toList());
-        products.forEach(this::setColorsForProduct);
-        return products;
+        return StreamSupport.stream(productRepository.findAllByCategory(category).spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductEntity> findAllByPriceBetween(Double minPrice, Double maxPrice) {
-        List<ProductEntity> products = StreamSupport.stream(productRepository.findAllByPriceBetween(minPrice, maxPrice).spliterator(), false).collect(Collectors.toList());
-        products.forEach(this::setColorsForProduct);
-        return products;
+        return StreamSupport.stream(productRepository.findAllByPriceBetween(minPrice, maxPrice).spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductEntity> priceLessThan(Double price) {
-        List<ProductEntity> products = StreamSupport.stream(productRepository.priceLessThan(price).spliterator(), false).collect(Collectors.toList());
-        products.forEach(this::setColorsForProduct);
-        return products;
+        return StreamSupport.stream(productRepository.priceLessThan(price).spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductEntity> findAllByBrand(String brand) {
         Brand brandEnum = Brand.valueOf(brand);
-        List<ProductEntity> products = StreamSupport.stream(productRepository.findAllByBrand(brandEnum).spliterator(), false).collect(Collectors.toList());
-        products.forEach(this::setColorsForProduct);
-        return products;
+        return StreamSupport.stream(productRepository.findAllByBrand(brandEnum).spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductEntity> findAllBySize(String size) {
-        List<ProductEntity> products = StreamSupport.stream(productRepository.findAllBySize(size).spliterator(), false).collect(Collectors.toList());
-        products.forEach(this::setColorsForProduct);
-        return products;
+        return StreamSupport.stream(productRepository.findAllBySize(size).spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductEntity> findAllByMaterial(String material) {
         Material materialEnum = Material.valueOf(material);
-        List<ProductEntity> products = StreamSupport.stream(productRepository.findAllByMaterial(materialEnum).spliterator(), false).collect(Collectors.toList());
-        products.forEach(this::setColorsForProduct);
-        return products;
+        return StreamSupport.stream(productRepository.findAllByMaterial(materialEnum).spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductEntity> findAllByProductCondition(String productCondition) {
         ProductCondition productConditionEnum = ProductCondition.valueOf(productCondition);
-        List<ProductEntity> products = StreamSupport.stream(productRepository.findAllByProductCondition(productConditionEnum).spliterator(), false).collect(Collectors.toList());
-        products.forEach(this::setColorsForProduct);
-        return products;
+        return StreamSupport.stream(productRepository.findAllByProductCondition(productConditionEnum).spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductEntity> findAllByAudience(String audience) {
         Audience audienceEnum = Audience.valueOf(audience);
-        List<ProductEntity> products = StreamSupport.stream(productRepository.findAllByAudience(audienceEnum).spliterator(), false).collect(Collectors.toList());
-        products.forEach(this::setColorsForProduct);
-        return products;
+        return StreamSupport.stream(productRepository.findAllByAudience(audienceEnum).spliterator(), false).collect(Collectors.toList());
     }
 }

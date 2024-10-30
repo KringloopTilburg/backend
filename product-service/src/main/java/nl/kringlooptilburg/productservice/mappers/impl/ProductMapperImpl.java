@@ -1,5 +1,7 @@
 package nl.kringlooptilburg.productservice.mappers.impl;
 
+import java.util.Optional;
+import java.util.UUID;
 import nl.kringlooptilburg.productservice.domain.dto.ProductDto;
 import nl.kringlooptilburg.productservice.domain.entities.ColorEntity;
 import nl.kringlooptilburg.productservice.domain.entities.ProductEntity;
@@ -17,18 +19,21 @@ import java.util.stream.Collectors;
 public class ProductMapperImpl implements Mapper<ProductEntity, ProductDto> {
 
     private final ModelMapper modelMapper;
-    private final ColorService colorService;
 
     public ProductMapperImpl(ModelMapper modelMapper, ColorService colorService) {
         this.modelMapper = modelMapper;
-        this.colorService = colorService;
 
-        Converter<Set<Color>, Set<ColorEntity>> colorToEntityConverter = context -> context.getSource().stream()
+        Converter<Set<Color>, Set<UUID>> colorToEntityConverter = context -> context.getSource().stream()
                 .map(colorService::findOneByColor)
+                .map(ColorEntity::getColorId)
                 .collect(Collectors.toSet());
 
-        Converter<Set<ColorEntity>, Set<Color>> entityToColorConverter = context -> context.getSource().stream()
+        Converter<Set<UUID>, Set<Color>> entityToColorConverter = context -> context.getSource().stream()
+                .map(colorService::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .map(ColorEntity::getColor)
+                .map(Color::valueOf)
                 .collect(Collectors.toSet());
 
         modelMapper.typeMap(ProductDto.class, ProductEntity.class).addMappings(mapper -> mapper.using(colorToEntityConverter).map(ProductDto::getColors, ProductEntity::setColors));
