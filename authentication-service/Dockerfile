@@ -1,5 +1,5 @@
 FROM openjdk:21-slim
-EXPOSE 8081
+EXPOSE 8080
 WORKDIR /app
 
 ARG JAR_FILE=target/authentication.jar
