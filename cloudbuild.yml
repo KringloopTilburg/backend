@@ -1,51 +1,38 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: 'gcr.io/kaniko-project/executor:latest'
     id: 'Build API Gateway'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/service-a:$COMMIT_SHA', './api-gateway']
-  - name: 'gcr.io/cloud-builders/docker'
-    id: 'Push API Gateway'
-    args: ['push', 'gcr.io/$PROJECT_ID/service-a:$COMMIT_SHA']
-
-  # Build and push Docker image for Service B
-#  - name: 'gcr.io/cloud-builders/docker'
-#    id: 'Build Service B'
-#    args: ['build', '-t', 'gcr.io/$PROJECT_ID/service-b:$COMMIT_SHA', './service-b']
-#  - name: 'gcr.io/cloud-builders/docker'
-#    id: 'Push Service B'
-#    args: ['push', 'gcr.io/$PROJECT_ID/service-b:$COMMIT_SHA']
-
-  # Deploy Service A to Kubernetes
-  - name: 'gcr.io/cloud-builders/kubectl'
-    id: 'Deploy Service A'
-    args: [
-      'set', 'image',
-      'deployment/service-a',
-      'service-a=gcr.io/$PROJECT_ID/service-a:$COMMIT_SHA',
-      '--namespace=default'
-    ]
-
-#  # Deploy Service B to Kubernetes
-#  - name: 'gcr.io/cloud-builders/kubectl'
-#    id: 'Deploy Service B'
-#    args: [
-#      'set', 'image',
-#      'deployment/service-b',
-#      'service-b=gcr.io/$PROJECT_ID/service-b:$COMMIT_SHA',
-#      '--namespace=default'
-#    ]
-
-  # Deploy Service C to Kubernetes
-  - name: 'gcr.io/cloud-builders/kubectl'
-    id: 'Deploy Service C'
-    args: [
-      'set', 'image',
-      'deployment/service-c',
-      'service-c=gcr.io/$PROJECT_ID/service-c:$COMMIT_SHA',
-      '--namespace=default'
-    ]
-
-# List of images to push to Google Container Registry
-images:
-  - 'gcr.io/$PROJECT_ID/service-a:$COMMIT_SHA'
-  - 'gcr.io/$PROJECT_ID/service-b:$COMMIT_SHA'
-  - 'gcr.io/$PROJECT_ID/service-c:$COMMIT_SHA'
+    args:
+      - --dockerfile=./api-gateway/Dockerfile
+      - --destination=europe-north1-docker.pkg.dev/kringloop2/docker-repository/api-gateway:latest
+      - --cache=false
+      - --cache-ttl=72h
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    id: 'Build Authentication Service'
+    args:
+      - --dockerfile=./authentication-service/Dockerfile
+      - --destination=europe-north1-docker.pkg.dev/kringloop2/docker-repository/authentication-service:latest
+      - --cache=false
+      - --cache-ttl=72h
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    id: 'Build Business Service'
+    args:
+      - --dockerfile=./business-service/Dockerfile
+      - --destination=europe-north1-docker.pkg.dev/kringloop2/docker-repository/business-service:latest
+      - --cache=false
+      - --cache-ttl=72h
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    id: 'Build Product Service'
+    args:
+      - --dockerfile=./product-service/Dockerfile
+      - --destination=europe-north1-docker.pkg.dev/kringloop2/docker-repository/product-service:latest
+      - --cache=false
+      - --cache-ttl=72h
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    id: 'Build Product Image Service'
+    args:
+      - --dockerfile=./productimage-service/Dockerfile
+      - --destination=europe-north1-docker.pkg.dev/kringloop2/docker-repository/productimage-service:latest
+      - --cache=false
+      - --cache-ttl=72h
+options:
+  logging: CLOUD_LOGGING_ONLY
