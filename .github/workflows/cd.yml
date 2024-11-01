@@ -27,4 +27,4 @@ jobs:
       - id: 'build'
         name: Build to Google Cloud
         working-directory: .
-        run: gcloud builds submit --project=kringloop2 --region=europe-west1 --ignore-file=.dockerignore --config=cloudbuild.yaml
+        run: gcloud builds submit --project=kringloop2 --region=europe-west1 --ignore-file=.dockerignore --config=cloudbuild.yml
