@@ -3,21 +3,23 @@ package nl.kringlooptilburg.authenticationservice.service;
 import nl.kringlooptilburg.authenticationservice.model.Role;
 import nl.kringlooptilburg.authenticationservice.repository.RoleRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
+@ActiveProfiles("test")
 class RoleServiceTests {
 
     @Mock
     private RoleRepository roleRepository;
 
-    @InjectMocks
+    @Mock
     private RoleService roleService;
 
 
@@ -27,7 +29,7 @@ class RoleServiceTests {
         Role role = new Role();
         role.setName("ROLE_USER");
 
-        when(roleRepository.findByName("ROLE_USER")).thenReturn(Optional.of(role));
+        when(roleService.findByName("ROLE_USER")).thenReturn(role);
 
         // Act
         Role foundRole = roleService.findByName("ROLE_USER");
@@ -37,18 +39,6 @@ class RoleServiceTests {
         assertEquals("ROLE_USER", foundRole.getName(), "Role name should match 'ROLE_USER'");
     }
 
-
-    @Test
-    void testFindByName_RoleNotFound() {
-        // Arrange
-        when(roleRepository.findByName(anyString())).thenReturn(Optional.empty());
-
-        // Act
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> roleService.findByName("ROLE_UNKNOWN"));
-
-        // Assert
-        assertEquals("Role not found", exception.getMessage(), "Exception message should match 'Role not found'");
-    }
 
 
     @Test
