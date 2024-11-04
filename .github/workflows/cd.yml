@@ -3,10 +3,10 @@ name: Continuous Deployment
 on:
   push:
     branches:
-      - ${{ vars.RELEASE_BRANCH }}
+      - pipeline-main
   pull_request:
     branches:
-      - ${{ vars.RELEASE_BRANCH }}
+      - pipeline-main
 
 jobs:
   build-microservices:
