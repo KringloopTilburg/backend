@@ -3,10 +3,10 @@ name: Continuous Integration
 on:
   push:
     branches:
-      - pipeline-dev
+      - ${{ vars.DEV_BRANCH }}
   pull_request:
     branches:
-      - pipeline-dev
+      - ${{ vars.DEV_BRANCH }}
 
 jobs:
   test:
