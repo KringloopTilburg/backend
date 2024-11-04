@@ -3,10 +3,10 @@ name: Continuous Integration
 on:
   push:
     branches:
-      - ${{ vars.DEV_BRANCH }}
+      - '${{ vars.DEV_BRANCH }}'
   pull_request:
     branches:
-      - ${{ vars.DEV_BRANCH }}
+      - '${{ vars.DEV_BRANCH }}'
 
 jobs:
   test:
