@@ -1,0 +1,106 @@
+{
+	"info": {
+		"_postman_id": "6a4b94d2-ead2-43f5-adc9-f09f2c5570ab",
+		"name": "Authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19107840",
+		"_collection_link": "https://kringloop013-team.postman.co/workspace/Kringloop013~ceb0bd20-9715-4f38-9fac-2ebb3365326f/collection/19107840-6a4b94d2-ead2-43f5-adc9-f09f2c5570ab?action=share&source=collection_link&creator=19107840"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var accessToken = pm.response.json().accessToken;",
+							"var refreshToken = pm.response.json().refreshToken;",
+							"pm.environment.set(\"accessToken\", accessToken);",
+							"pm.environment.set(\"refreshToken\", refreshToken);",
+							"pm.environment.set(\"xsrf-token\", decodeURIComponent(pm.cookies.get(\"XSRF-TOKEN\")))"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"password1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/auth/login",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var accessToken = pm.response.json().accessToken;",
+							"var refreshToken = pm.response.json().refreshToken;",
+							"pm.environment.set(\"accessToken\", accessToken);",
+							"pm.environment.set(\"refreshToken\", refreshToken);",
+							" "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"password1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
