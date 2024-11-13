@@ -8,6 +8,7 @@ import nl.kringlooptilburg.authenticationservice.model.AuthenticationResponse;
 import nl.kringlooptilburg.authenticationservice.model.User;
 import nl.kringlooptilburg.authenticationservice.publisher.LogPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +20,7 @@ public class AuthenticationService {
     private final LogPublisher logPublisher;
     private final RoleService roleService;
 
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthenticationResponse register(AuthenticationRequest authRequest) {
         authRequest.setPassword(passwordEncoder.encode(authRequest.getPassword()));

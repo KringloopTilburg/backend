@@ -6,19 +6,16 @@ import nl.kringlooptilburg.authenticationservice.model.AuthenticationResponse;
 import nl.kringlooptilburg.authenticationservice.model.User;
 import nl.kringlooptilburg.authenticationservice.model.Role;
 import nl.kringlooptilburg.authenticationservice.publisher.LogPublisher;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -27,94 +24,106 @@ class AuthenticationServiceTests {
 
     @Mock
     private JwtService jwtService;
-
     @Mock
     private CustomUserDetailsService customUserDetailsService;
-
     @Mock
-    private BCryptPasswordEncoder passwordEncoder;
-
+    private RoleService roleService;
     @Mock
-    private LogPublisher logPublisher;
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private AuthenticationService authenticationService;
 
-    @BeforeEach
-    public void setup() {
-        Mockito.doNothing().when(logPublisher).publishLog(any(String.class));
-    }
-
     @Test
-    @DisplayName("Should be able to register a new user")
-    void TEST_register_001() {
+    @DisplayName("Registers new user")
+    void testRegisterSuccess() {
         // Arrange
-        AuthenticationRequest authRequest = new AuthenticationRequest("test@example.com", "password");
+        AuthenticationRequest authRequest = new AuthenticationRequest();
+        authRequest.setEmail("test@example.com");
+        authRequest.setPassword("password");
 
         User newUser = new User();
-        newUser.setEmail(authRequest.getEmail());
-        newUser.setPassword(authRequest.getPassword());
-        newUser.setRole(Role.USER);
+        newUser.setEmail("test@example.com");
+        newUser.setPassword("encodedPassword");
+        newUser.setRole(new Role(1L, "ROLE_USER"));
 
+        when(passwordEncoder.encode(authRequest.getPassword())).thenReturn("encodedPassword");
+        when(roleService.findByName("ROLE_USER")).thenReturn(new Role(1L, "ROLE_USER"));
         when(customUserDetailsService.save(any())).thenReturn(newUser);
-        when(jwtService.generate(any(), anyString())).thenReturn("access_token");
+        when(jwtService.generate(any(User.class), eq("ACCESS"))).thenReturn("accessToken");
+        when(jwtService.generate(any(User.class), eq("REFRESH"))).thenReturn("refreshToken");
 
         // Act
         AuthenticationResponse response = authenticationService.register(authRequest);
 
         // Assert
         assertNotNull(response);
-        assertEquals("access_token", response.getAccessToken());
-        assertNotNull(response.getRefreshToken());
+        assertEquals("accessToken", response.getAccessToken());
+        assertEquals("refreshToken", response.getRefreshToken());
     }
 
     @Test
-    @DisplayName("Should return null if user is not saved successfully")
-    void TEST_register_002() {
+    void testRegister_failure_userNotSaved() {
         // Arrange
-        AuthenticationRequest authRequest = new AuthenticationRequest("test@example.com", "password");
+        AuthenticationRequest authRequest = new AuthenticationRequest("test@example.com", "password123");
+        Role role = new Role(1L, "ROLE_USER");
 
-        // Mock userRepositoryService.save() om null terug te geven
-        when(customUserDetailsService.save(any())).thenReturn(null);
+        when(passwordEncoder.encode(authRequest.getPassword())).thenReturn("encodedPassword");
+        when(roleService.findByName("ROLE_USER")).thenReturn(role);
+        when(customUserDetailsService.save(any(User.class))).thenReturn(null);
+
+        // Act
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            authenticationService.register(authRequest);
+        });
 
         // Assert
-        assertThrows(IllegalArgumentException.class, () -> authenticationService.register(authRequest));
+        assertEquals("Failed to register user. Please try again later", exception.getMessage());
     }
 
+
     @Test
-    @DisplayName("Should be able to login with valid credentials")
-    void TEST_login_001() {
+    void testLogin_successful() {
         // Arrange
-        AuthenticationRequest authRequest = new AuthenticationRequest("test@example.com", "password");
+        AuthenticationRequest authRequest = new AuthenticationRequest("test@example.com", "password123");
+        User user = new User();
+        user.setUserId(1);
+        user.setEmail(authRequest.getEmail());
+        user.setPassword("encodedPassword");
+        user.setRole(new Role(1L, "ROLE_USER"));
 
-        User existingUser = new User();
-        existingUser.setEmail(authRequest.getEmail());
-        existingUser.setPassword(authRequest.getPassword());
-        existingUser.setRole(Role.USER);
-
-        when(customUserDetailsService.findByEmail(authRequest.getEmail())).thenReturn(existingUser);
-        when(passwordEncoder.matches(authRequest.getPassword(), existingUser.getPassword())).thenReturn(true);
-        when(jwtService.generate(any(), anyString())).thenReturn("access_token");
+        when(customUserDetailsService.findByEmail(authRequest.getEmail())).thenReturn(user);
+        when(passwordEncoder.matches(authRequest.getPassword(), user.getPassword())).thenReturn(true);
+        when(jwtService.generate(user, "ACCESS")).thenReturn("accessToken");
+        when(jwtService.generate(user, "REFRESH")).thenReturn("refreshToken");
 
         // Act
         AuthenticationResponse response = authenticationService.login(authRequest);
 
         // Assert
         assertNotNull(response);
-        assertEquals("access_token", response.getAccessToken());
-        assertNotNull(response.getRefreshToken());
+        assertEquals("accessToken", response.getAccessToken());
+        assertEquals("refreshToken", response.getRefreshToken());
     }
 
     @Test
-    @DisplayName("Should throw exception when login with invalid credentials")
-    void TEST_login_002() {
+    void testLogin_invalidCredentials() {
         // Arrange
-        AuthenticationRequest authRequest = new AuthenticationRequest("test@example.com", "password");
+        AuthenticationRequest authRequest = new AuthenticationRequest("test@example.com", "wrongPassword");
+        User user = new User();
+        user.setEmail(authRequest.getEmail());
+        user.setPassword("encodedPassword");
 
-        when(customUserDetailsService.findByEmail(anyString())).thenThrow(InvalidCredentialsException.class);
+        when(customUserDetailsService.findByEmail(authRequest.getEmail())).thenReturn(user);
+        when(passwordEncoder.matches(authRequest.getPassword(), user.getPassword())).thenReturn(false); // Invalid password
+
+        // Act
+        InvalidCredentialsException exception = assertThrows(InvalidCredentialsException.class, () -> {
+            authenticationService.login(authRequest);
+        });
 
         // Assert
-        assertThrows(InvalidCredentialsException.class, () -> authenticationService.login(authRequest));
+        assertEquals("Ongeldige e-mail/wachtwoord combinatie.", exception.getMessage());
     }
 }
 

@@ -39,7 +39,7 @@ class JwtServiceTests {
     @DisplayName("Should generate valid access token")
     void testGenerateAccessToken() {
         // Arrange
-        User user = new User(1, "test@example.com", "password", Role.USER);
+        User user = new User(1, "test@example.com", "password", new Role(), null);
 
         // Act
         String accessToken = jwtService.generate(user, "ACCESS");
@@ -52,7 +52,7 @@ class JwtServiceTests {
     @DisplayName("Should generate valid refresh token")
     void testGenerateRefreshToken() {
         // Arrange
-        User user = new User(1, "test@example.com", "password", Role.USER);
+        User user = new User(1, "test@example.com", "password", new Role(), null);
 
         // Act
         String refreshToken = jwtService.generate(user, "REFRESH");
