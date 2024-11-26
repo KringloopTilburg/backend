@@ -6,7 +6,9 @@ import nl.kringlooptilburg.businessservice.domain.dto.BusinessDto;
 import nl.kringlooptilburg.businessservice.domain.entities.Business;
 import nl.kringlooptilburg.businessservice.mappers.Mapper;
 import nl.kringlooptilburg.businessservice.services.BusinessService;
+import nl.kringlooptilburg.businessservice.services.KVKService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,18 +22,25 @@ import java.util.stream.Collectors;
 @RequestMapping("business-service/user")
 public class BusinessController {
 
+    @Qualifier("BusinessService")
     private BusinessService businessService;
+    private KVKService kvkService;
     private Mapper<Business, BusinessDto> mapper;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @PostMapping(path = "/business")
-    public ResponseEntity<BusinessDto> createBusiness(@RequestBody BusinessDto businessDto) {
+    public ResponseEntity<BusinessDto> createBusiness(@RequestBody BusinessDto businessDto, @PathVariable String KvKnumber) {
         //TODO: validate kvk number
-        Business productEntity = mapper.mapFrom(businessDto);
-        Business savedProductEntity = businessService.createBusiness(productEntity);
-        return new ResponseEntity<>(mapper.mapTo(savedProductEntity), HttpStatus.CREATED);
+        try {
+            String kvkData = kvkService.getKVKNumber(KvKnumber).toString();
+            Business productEntity = mapper.mapFrom(businessDto);
+            Business savedProductEntity = businessService.createBusiness(productEntity);
+            return new ResponseEntity<>(mapper.mapTo(savedProductEntity), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>((HttpStatus.NOT_FOUND));
+        }
     }
 
     @GetMapping(path = "/business")
@@ -50,4 +59,6 @@ public class BusinessController {
             return new ResponseEntity<>(productDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+
 }

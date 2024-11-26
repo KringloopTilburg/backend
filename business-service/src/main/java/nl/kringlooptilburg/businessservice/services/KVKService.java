@@ -8,12 +8,10 @@ import retrofit2.http.Path;
 import java.util.List;
 import java.util.Optional;
 
-public interface BusinessService {
-    Business createBusiness(Business business);
+public interface KVKService {
+    @GET("${api.url.kvk}{kvkNumber}")
+    Call<Void> getKVKNumber(@Path("kvkNumber") String kvkNumber);
 
-    List<Business> findAll();
+    boolean validateKVKNumber(String KVKNumber);
 
-    Optional<Business> findOne(Integer productId);
-
-    void delete(Integer productId);
 }
