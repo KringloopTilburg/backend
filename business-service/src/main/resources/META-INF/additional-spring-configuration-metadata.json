@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "api.key.kvk",
+      "type": "java.lang.String",
+      "description": "The API key for kvk."
+    },
+    {
+      "name": "api.url.kvk",
+      "type": "java.lang.String",
+      "description": "The base URL for the API endpoint."
+    }
+  ]
+}
