@@ -1,17 +1,16 @@
 package nl.kringlooptilburg.businessservice.config;
 
-import nl.kringlooptilburg.businessservice.services.impl.BusinessServiceImpl;
+import nl.kringlooptilburg.businessservice.services.KVKApiService;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Value;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 @Configuration
 public class RetrofitConfig {
 
-    @Value("${api.url.kvk}")
     private final String baseUrl;
 
     public RetrofitConfig(@Value("${api.url.kvk}") String baseUrl) {
@@ -19,7 +18,7 @@ public class RetrofitConfig {
     }
 
     @Bean
-    public BusinessServiceImpl BusinessService() {
+    public KVKApiService kvkApiService() {
         // Configureer OkHttpClient (je kunt ook timeouts, interceptors etc. toevoegen)
         OkHttpClient client = new OkHttpClient.Builder().build();
 
@@ -31,7 +30,7 @@ public class RetrofitConfig {
                 .build();
 
         // Retourneer de implementatie van de KvkApiService
-        return retrofit.create(BusinessServiceImpl.class);
+        return retrofit.create(KVKApiService.class);
     }
 }
 

@@ -2,45 +2,45 @@ package nl.kringlooptilburg.businessservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nl.kringlooptilburg.businessservice.domain.dto.BusinessDto;
 import nl.kringlooptilburg.businessservice.domain.entities.Business;
 import nl.kringlooptilburg.businessservice.mappers.Mapper;
 import nl.kringlooptilburg.businessservice.services.BusinessService;
-import nl.kringlooptilburg.businessservice.services.KVKService;
+import nl.kringlooptilburg.businessservice.services.impl.KVKServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("business-service/user")
 public class BusinessController {
 
-    @Qualifier("BusinessService")
     private BusinessService businessService;
-    private KVKService kvkService;
+    private KVKServiceImpl kvkServiceImpl;
     private Mapper<Business, BusinessDto> mapper;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @PostMapping(path = "/business")
-    public ResponseEntity<BusinessDto> createBusiness(@RequestBody BusinessDto businessDto, @PathVariable String KvKnumber) {
+    public ResponseEntity<BusinessDto> createBusiness(@RequestBody BusinessDto businessDto) {
         //TODO: validate kvk number
-        try {
-            String kvkData = kvkService.getKVKNumber(KvKnumber).toString();
+            boolean isValid = kvkServiceImpl.validateKVKNumber(businessDto.getKvkNumber());
+            if (!isValid) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid KVK number");
+            }
             Business productEntity = mapper.mapFrom(businessDto);
             Business savedProductEntity = businessService.createBusiness(productEntity);
             return new ResponseEntity<>(mapper.mapTo(savedProductEntity), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>((HttpStatus.NOT_FOUND));
-        }
     }
 
     @GetMapping(path = "/business")

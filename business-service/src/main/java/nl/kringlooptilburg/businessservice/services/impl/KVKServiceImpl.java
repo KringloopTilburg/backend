@@ -1,37 +1,21 @@
 package nl.kringlooptilburg.businessservice.services.impl;
 
-import nl.kringlooptilburg.businessservice.domain.entities.Business;
-import nl.kringlooptilburg.businessservice.repositories.BusinessRepository;
-import nl.kringlooptilburg.businessservice.services.BusinessService;
-import nl.kringlooptilburg.businessservice.services.KVKService;
-import okhttp3.OkHttpClient;
+import nl.kringlooptilburg.businessservice.services.KVKApiService;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 @Service
-public class KVKServiceImpl implements KVKService {
-    private final KVKService kvkService;
-    OkHttpClient client = new OkHttpClient();
+public class KVKServiceImpl {
 
-    public KVKServiceImpl(KVKService kvkService) {
-        this.kvkService = kvkService;
+    private final KVKApiService kvkApiService;
+
+    public KVKServiceImpl(KVKApiService kvkApiService){
+        this.kvkApiService = kvkApiService;
     }
 
-
-    @Override
-    public Call<Void> getKVKNumber(String kvkNumber) {
-        return kvkService.getKVKNumber(kvkNumber);
-    }
-
-    @Override
     public boolean validateKVKNumber(String KVKNumber) {
-        Call<Void> call = getKVKNumber(KVKNumber);
+        Call<Void> call = kvkApiService.getKVKNumber(KVKNumber);
         try {
             // Voer de aanroep uit en haal de response op
             Response<Void> response = call.execute();
