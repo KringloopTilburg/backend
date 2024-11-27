@@ -1,12 +1,10 @@
 name: Continuous Integration
 
 on:
-  push:
-    branches:
-      - pipeline-dev
   pull_request:
     branches:
-      - pipeline-dev
+      - dev
+      - main
 
 jobs:
   test:

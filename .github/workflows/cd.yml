@@ -3,10 +3,7 @@ name: Continuous Deployment
 on:
   push:
     branches:
-      - pipeline-main
-  pull_request:
-    branches:
-      - pipeline-main
+      - main
 
 jobs:
   build-microservices:
