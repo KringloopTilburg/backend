@@ -98,6 +98,12 @@ Instructies voor het opstarten van een service zijn te vinden in het gedeelte "O
 
 <p align="right">(<a href="#readme-top">terug naar boven</a>)</p>
 
+## Google cloud Logging
+```gcloud auth application-default login```
+
+Profiles:
+- dev: regulier local loggen
+- cloud: cloud logging
 
 ## Contact
 
