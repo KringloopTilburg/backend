@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "bacdcf0b-d593-4b52-8884-f305ef8aa013",
+		"name": "Business",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19107840",
+		"_collection_link": "https://kringloop013-team.postman.co/workspace/Kringloop013~ceb0bd20-9715-4f38-9fac-2ebb3365326f/collection/24649969-bacdcf0b-d593-4b52-8884-f305ef8aa013?action=share&source=collection_link&creator=19107840"
+	},
+	"item": [
+		{
+			"name": "owner",
+			"item": [
+				{
+					"name": "Delete business",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/business-service/owner/business/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"business-service",
+								"owner",
+								"business",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "List businesses",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/business-service/user/business",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"business-service",
+						"user",
+						"business"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get business by ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/business-service/user/business/{{business_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"business-service",
+						"user",
+						"business",
+						"{{business_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register new business",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Kringloop Tilburg\",\n    \"kvkNumber\": \"90714709\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/business-service/user/business",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"business-service",
+						"user",
+						"business"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

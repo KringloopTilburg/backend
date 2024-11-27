@@ -1,0 +1,648 @@
+{
+	"info": {
+		"_postman_id": "ada03e7c-8d77-496b-aada-4d8ab777b589",
+		"name": "Products",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19107840",
+		"_collection_link": "https://kringloop013-team.postman.co/workspace/Kringloop013~ceb0bd20-9715-4f38-9fac-2ebb3365326f/collection/19107840-ada03e7c-8d77-496b-aada-4d8ab777b589?action=share&source=collection_link&creator=19107840"
+	},
+	"item": [
+		{
+			"name": "business-service branch",
+			"item": [
+				{
+					"name": "business",
+					"item": [
+						{
+							"name": "Create product",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "productJson",
+											"value": "{\n    \"businessId\": 1,\n    \"name\": \"T-Shirt\",\n    \"description\": \"Een heel mooi Shirt.\",\n    \"price\": 9.99,\n    \"brand\": \"TOMMY_HILFIGER\",\n    \"category\": \"Shirts\",\n    \"size\": \"M\",\n    \"material\": \"POLYESTER\",\n    \"productCondition\": \"GOOD\",\n    \"colors\": [\n        \"WHITE\",\n        \"PINK\"\n    ],\n    \"audience\": \"UNISEX\"\n}",
+											"contentType": "",
+											"type": "text"
+										},
+										{
+											"key": "images",
+											"type": "file",
+											"src": "postman-cloud:///1ef7cc86-05fc-4fd0-9b2c-a66e42ba260b"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/product-service/business/product",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"product-service",
+										"business",
+										"product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Product",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/product-service/business/product/{{productId}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"product-service",
+										"business",
+										"product",
+										"{{productId}}"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/product-service/user/product",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"product-service",
+								"user",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/product-service/products/{{productId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"product-service",
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Products by Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/products/category/{{category}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								"category",
+								"{{category}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Products by Price Range",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/product-service/user/price/12/40",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"product-service",
+								"user",
+								"price",
+								"12",
+								"40"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Products by Price Less Than",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/products/price/12",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								"price",
+								"12"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Products by Brand",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/products/brand/Palace",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								"brand",
+								"Palace"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Products by Size",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/products/size/M",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								"size",
+								"M"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Products by Material",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/products/material/cloth",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								"material",
+								"cloth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Products by Condition",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/products/product-condition/nieuw",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								"product-condition",
+								"nieuw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Products by Audience",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/products/audience/men",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								"audience",
+								"men"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List businesses Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/business-service/business",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"business-service",
+								"business"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get business by ID Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/business-service/business/{{business_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"business-service",
+								"business",
+								"{{business_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create product",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "productJson",
+							"value": "{\n    \"name\": \"T-Shirt\",\n    \"description\": \"Een heel mooi Shirt.\",\n    \"price\": 9.99,\n    \"brand\": \"TOMMY_HILFIGER\",\n    \"category\": \"Shirts\",\n    \"size\": \"M\",\n    \"material\": \"POLYESTER\",\n    \"productCondition\": \"GOOD\",\n    \"colors\": [\n        \"WHITE\",\n        \"PINK\"\n    ],\n    \"audience\": \"UNISEX\"\n}",
+							"contentType": "",
+							"type": "text"
+						},
+						{
+							"key": "images",
+							"type": "file",
+							"src": "postman-cloud:///1ef7cc86-05fc-4fd0-9b2c-a66e42ba260b"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/product-service/products",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"product-service",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/product-service/products",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"product-service",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/product-service/products/{{productId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"product-service",
+						"products",
+						"{{productId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/product-service/products/{{productId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"product-service",
+						"products",
+						"{{productId}}"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Products by Category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/products/category/{{category}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products",
+						"category",
+						"{{category}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Products by Price Range",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/products/price/12/40",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products",
+						"price",
+						"12",
+						"40"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Products by Price Less Than",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/products/price/12",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products",
+						"price",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Products by Brand",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/products/brand/Palace",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products",
+						"brand",
+						"Palace"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Products by Size",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/products/size/M",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products",
+						"size",
+						"M"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Products by Material",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/products/material/cloth",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products",
+						"material",
+						"cloth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Products by Condition",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/products/product-condition/nieuw",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products",
+						"product-condition",
+						"nieuw"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Products by Audience",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/products/audience/men",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products",
+						"audience",
+						"men"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
