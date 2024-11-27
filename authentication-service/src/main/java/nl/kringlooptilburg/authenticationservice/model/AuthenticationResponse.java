@@ -15,5 +15,5 @@ public class AuthenticationResponse {
     @Nullable
     private Integer businessId;
     private String email;
-    private Role role;
+    private String role;
 }

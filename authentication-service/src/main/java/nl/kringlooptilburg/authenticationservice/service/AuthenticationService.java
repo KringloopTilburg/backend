@@ -37,7 +37,7 @@ public class AuthenticationService {
         String refreshToken = jwtService.generate(user, "REFRESH");
 
         return new AuthenticationResponse(accessToken, refreshToken,
-                user.getUserId(), user.getBusinessId(), user.getEmail(), user.getRole());
+                user.getUserId(), user.getBusinessId(), user.getEmail(), user.getRole().getName());
     }
 
     public AuthenticationResponse login(AuthenticationRequest authRequest) {
@@ -47,7 +47,7 @@ public class AuthenticationService {
             String refreshToken = jwtService.generate(user, "REFRESH");
 
             return new AuthenticationResponse(accessToken, refreshToken,
-                    user.getUserId(), user.getBusinessId(), user.getEmail(), user.getRole());
+                    user.getUserId(), user.getBusinessId(), user.getEmail(), user.getRole().getName());
         }
         throw new InvalidCredentialsException("Ongeldige e-mail/wachtwoord combinatie.");
     }
