@@ -44,4 +44,7 @@ Start deze op met het commando:
 
 Daarna start je de API Gateway zelf op d.m.v. de Dockerfile. Eerst bouw je deze met het commando `docker build -t api-gateway .` (let op de directory). Vervolgens start je de docker container op met `docker run -d api-gateway`.
 
+### IntelliJ IDEA gebruiken
+Maak je gebruik van de IntelliJ IDEA IDE, dan kun je de API Gateway starten door de `ApiGatewayApplication` klasse te runnen of door een Build configuratie toe te voegen en Spring Boot te selecteren, je hoeft dan geen Docker te gebruiken.
+
 <p align="right">(<a href="#readme-top">terug naar boven</a>)</p>
