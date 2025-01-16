@@ -26,6 +26,11 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
+    public boolean existsByEmail(String businessName) {
+        return false;
+    }
+
+    @Override
     public List<Business> findAll() {
         return StreamSupport.stream(businessRepository.findAll().spliterator(), false).collect(Collectors.toList());
     }
