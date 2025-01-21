@@ -1,0 +1,38 @@
+steps:
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    id: 'Build API Gateway'
+    args:
+      - --dockerfile=./api-gateway/Dockerfile
+      - --destination=europe-north1-docker.pkg.dev/kringloop2/docker-repository/api-gateway:latest
+      - --cache=false
+      - --cache-ttl=72h
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    id: 'Build Authentication Service'
+    args:
+      - --dockerfile=./authentication-service/Dockerfile
+      - --destination=europe-north1-docker.pkg.dev/kringloop2/docker-repository/authentication-service:latest
+      - --cache=false
+      - --cache-ttl=72h
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    id: 'Build Business Service'
+    args:
+      - --dockerfile=./business-service/Dockerfile
+      - --destination=europe-north1-docker.pkg.dev/kringloop2/docker-repository/business-service:latest
+      - --cache=false
+      - --cache-ttl=72h
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    id: 'Build Product Service'
+    args:
+      - --dockerfile=./product-service/Dockerfile
+      - --destination=europe-north1-docker.pkg.dev/kringloop2/docker-repository/product-service:latest
+      - --cache=false
+      - --cache-ttl=72h
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    id: 'Build Product Image Service'
+    args:
+      - --dockerfile=./productimage-service/Dockerfile
+      - --destination=europe-north1-docker.pkg.dev/kringloop2/docker-repository/productimage-service:latest
+      - --cache=false
+      - --cache-ttl=72h
+options:
+  logging: CLOUD_LOGGING_ONLY

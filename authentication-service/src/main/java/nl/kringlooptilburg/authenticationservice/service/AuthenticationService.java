@@ -7,7 +7,6 @@ import nl.kringlooptilburg.authenticationservice.model.AuthenticationRequest;
 import nl.kringlooptilburg.authenticationservice.model.AuthenticationResponse;
 import nl.kringlooptilburg.authenticationservice.model.User;
 import nl.kringlooptilburg.authenticationservice.publisher.LogPublisher;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +36,8 @@ public class AuthenticationService {
         String accessToken = jwtService.generate(user, "ACCESS");
         String refreshToken = jwtService.generate(user, "REFRESH");
 
-        return new AuthenticationResponse(accessToken, refreshToken);
+        return new AuthenticationResponse(accessToken, refreshToken,
+                user.getUserId(), user.getBusinessId(), user.getEmail(), user.getRole().getName());
     }
 
     public AuthenticationResponse login(AuthenticationRequest authRequest) {
@@ -46,7 +46,8 @@ public class AuthenticationService {
             String accessToken = jwtService.generate(user, "ACCESS");
             String refreshToken = jwtService.generate(user, "REFRESH");
 
-            return new AuthenticationResponse(accessToken, refreshToken);
+            return new AuthenticationResponse(accessToken, refreshToken,
+                    user.getUserId(), user.getBusinessId(), user.getEmail(), user.getRole().getName());
         }
         throw new InvalidCredentialsException("Ongeldige e-mail/wachtwoord combinatie.");
     }

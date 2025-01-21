@@ -1,5 +1,5 @@
 FROM openjdk:21-slim
-EXPOSE 8084
+EXPOSE 8080
 WORKDIR /app
 
 ARG JAR_FILE

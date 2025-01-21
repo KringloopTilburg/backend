@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("test")
 public class TestConfig {
+
     @Bean
     @Primary
     public OtlpGrpcSpanExporter otlpHttpSpanExporter() {
@@ -22,4 +23,6 @@ public class TestConfig {
     public BatchSpanProcessor batchSpanProcessor() {
         return Mockito.mock(BatchSpanProcessor.class);
     }
+
+
 }

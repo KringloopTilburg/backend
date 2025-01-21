@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import nl.kringlooptilburg.authenticationservice.exception.EmailAlreadyExistsException;
 import nl.kringlooptilburg.authenticationservice.exception.InvalidCredentialsException;
 import nl.kringlooptilburg.authenticationservice.model.AuthenticationRequest;
+import nl.kringlooptilburg.authenticationservice.model.AuthenticationResponse;
 import nl.kringlooptilburg.authenticationservice.service.AuthenticationService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/auth")
@@ -15,22 +18,26 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthenticationService authenticationService;
+    private static final Log LOGGER = LogFactory.getLog(AuthController.class); // google cloud logging
+
 
     @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody AuthenticationRequest authRequest) {
+    public AuthenticationResponse register(@RequestBody AuthenticationRequest authRequest) {
         try {
-            return ResponseEntity.ok(authenticationService.register(authRequest));
+            return authenticationService.register(authRequest);
         } catch (EmailAlreadyExistsException exception) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email bestaat al");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "E-mailadres is al in gebruik.");
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody AuthenticationRequest authRequest) {
+    public AuthenticationResponse login(@RequestBody AuthenticationRequest authRequest) {
         try {
-            return ResponseEntity.ok(authenticationService.login(authRequest));
+            AuthenticationResponse result = authenticationService.login(authRequest);
+            LOGGER.warn("Login successful for user ID (" + result.getId() + ")");
+            return result;
         } catch (InvalidCredentialsException exception) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Ongeldige e-mail/wachtwoord combinatie.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Ongeldige e-mail/wachtwoord combinatie.");
         }
     }
 }

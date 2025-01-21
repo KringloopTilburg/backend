@@ -29,8 +29,7 @@ public class ProductEntity {
 
     private Double price;
 
-    @Enumerated(EnumType.STRING)
-    private Brand brand;
+    private String brand;
 
     private String category;
 

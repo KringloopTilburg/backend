@@ -22,7 +22,7 @@ public class TestDataUtil {
                 .name("Grey Ripped Jeans")
                 .description("Good condition, size L, grey ripped Jeans.")
                 .price(30.0)
-                .brand(Brand.ADIDAS)
+                .brand("Adidas")
                 .category("Jeans")
                 .size("L")
                 .material(Material.ACRYLIC)
@@ -43,7 +43,7 @@ public class TestDataUtil {
                 .name("Colourful Jacket")
                 .description("New, size M, colourful jacket.")
                 .price(20.0)
-                .brand(Brand.ZARA)
+                .brand("Zara")
                 .category("Outerwear")
                 .size("M")
                 .material(Material.COTTON)
@@ -54,19 +54,20 @@ public class TestDataUtil {
     }
 
     public static String createExampleProductJson() {
-        return "{\n" +
-                "  \"productId\": 1,\n" +
-                "  \"name\": \"Grey Ripped Jeans\",\n" +
-                "  \"description\": \"Good condition, size L, grey ripped Jeans.\",\n" +
-                "  \"price\": 30.0,\n" +
-                "  \"brand\": \"ADIDAS\",\n" +
-                "  \"category\": \"Jeans\",\n" +
-                "  \"size\": \"L\",\n" +
-                "  \"material\": \"ACRYLIC\",\n" +
-                "  \"productCondition\": \"GOOD\",\n" +
-                "  \"colors\": [\"RED\", \"BLUE\", \"GREEN\"],\n" +
-                "  \"audience\": \"MALE\"\n" +
-                "}";
+        return """
+                {
+                  "productId": 1,
+                  "name": "Grey Ripped Jeans",
+                  "description": "Good condition, size L, grey ripped Jeans.",
+                  "price": 30.0,
+                  "brand": "ADIDAS",
+                  "category": "Jeans",
+                  "size": "L",
+                  "material": "ACRYLIC",
+                  "productCondition": "GOOD",
+                  "colors": ["RED", "BLUE", "GREEN"],
+                  "audience": "MALE"
+                }""";
     }
 
 }
